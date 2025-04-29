@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/FlameBorn Token.sol": "Context"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/FlameBorn Token.sol": {
+			"keccak256": "0xb0928cb2f257aa1d10f1d97514aa84b2da318daf52c436940ce6178014f595da",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://77aba04ca46e97dad56c1e3041c0e04c22689fcfd4ca6f8992b903b874e8a359",
+				"dweb:/ipfs/QmS2XU99wDP4gsVfZv4yFSwTgafRRE7vWnmxDjouheTzAW"
+			]
+		}
+	},
+	"version": 1
+}

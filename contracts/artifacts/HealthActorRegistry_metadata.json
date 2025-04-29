@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.22+commit.4fc1097e"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -570,7 +570,7 @@
 		"compilationTarget": {
 			"contracts/HealthActorRegistry.sol": "HealthActorRegistry"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "cancun",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -639,11 +639,11 @@
 			]
 		},
 		"contracts/HealthActorRegistry.sol": {
-			"keccak256": "0x7e56b511a749e485b47e0ebffe07aa669e9535ed9d7d58f0576481ebe0cdbdee",
+			"keccak256": "0x702cfc09ea039b7046ebd2daa886754450ec66c42b057511c9f302389f3a8b6e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://45a59a71e108e7241a0b6964c8ae991a9b216fcf18d2c647edecf78430528345",
-				"dweb:/ipfs/QmSTp9JmvXXaEnhxpsF3hpGLbFphqvMKKAwUviFaH3Wtc9"
+				"bzz-raw://52e43ec4443b6c29d84d1d8bf8550a40a1ea6d04fc6c51505a0adb4cf783203e",
+				"dweb:/ipfs/QmekhQSWz6cbgafrzRucVodM8Pk62mnVf1Mo7FsFTg2MKt"
 			]
 		}
 	},
