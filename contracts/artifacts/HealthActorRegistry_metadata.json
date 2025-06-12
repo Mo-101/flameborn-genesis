@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.24+commit.e11b9ed9"
+		"version": "0.8.30+commit.73712a01"
 	},
 	"language": "Solidity",
 	"output": {
@@ -10,6 +10,16 @@
 					{
 						"internalType": "address",
 						"name": "admin",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IERC20",
+						"name": "_rewardsToken",
+						"type": "address"
+					},
+					{
+						"internalType": "contract HealthIDNFT",
+						"name": "_credentialNFT",
 						"type": "address"
 					}
 				],
@@ -192,12 +202,38 @@
 			},
 			{
 				"inputs": [],
+				"name": "ACTOR_REWARD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "DEFAULT_ADMIN_ROLE",
 				"outputs": [
 					{
 						"internalType": "bytes32",
 						"name": "",
 						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "DONATION_REWARD_RATE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -286,6 +322,19 @@
 				"name": "batchVerifyActors",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "credentialNFT",
+				"outputs": [
+					{
+						"internalType": "contract HealthIDNFT",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -422,6 +471,19 @@
 				"name": "revokeRole",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rewardsToken",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -570,7 +632,7 @@
 		"compilationTarget": {
 			"contracts/HealthActorRegistry.sol": "HealthActorRegistry"
 		},
-		"evmVersion": "cancun",
+		"evmVersion": "prague",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -596,6 +658,14 @@
 			"urls": [
 				"bzz-raw://f724110f7aeb6151af800ab8c12e6060b29bda9e013f0ccb331eb754d6a7cbf0",
 				"dweb:/ipfs/QmUcjzCZpxtUPdEThtAzE1f9LvuJiUGZxTdH9N6bHrb5Cf"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xe06a3f08a987af6ad2e1c1e774405d4fe08f1694b67517438b467cecf0da0ef7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://df6f0c459663c9858b6cba2cda1d14a7d05a985bed6d2de72bd8e78c25ee79db",
+				"dweb:/ipfs/QmeTTxZ7qVk9rjEv2R4CpCwdf8UMCcRqDNMvzNxHc3Fnn9"
 			]
 		},
 		"@openzeppelin/contracts/utils/Address.sol": {
@@ -639,11 +709,11 @@
 			]
 		},
 		"contracts/HealthActorRegistry.sol": {
-			"keccak256": "0x702cfc09ea039b7046ebd2daa886754450ec66c42b057511c9f302389f3a8b6e",
+			"keccak256": "0x1d98f997270192343ad9cce12e48a67e5c49b7c17f5be8c795644fd23f75ebcf",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://52e43ec4443b6c29d84d1d8bf8550a40a1ea6d04fc6c51505a0adb4cf783203e",
-				"dweb:/ipfs/QmekhQSWz6cbgafrzRucVodM8Pk62mnVf1Mo7FsFTg2MKt"
+				"bzz-raw://dfaed106e5e6661d76c8a9b2d944e347a342581a7d342dff250740b6e46729e8",
+				"dweb:/ipfs/QmWdoDSaD3fUCtpF1m6bAxXKJK46he7Xet57FpXt1EXgE3"
 			]
 		}
 	},

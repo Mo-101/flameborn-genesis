@@ -219,11 +219,11 @@
 	},
 	"sources": {
 		"contracts/FlameBorn Token.sol": {
-			"keccak256": "0xb0928cb2f257aa1d10f1d97514aa84b2da318daf52c436940ce6178014f595da",
+			"keccak256": "0x2d3a89acf7dee400bf49643d5701ea55e993729b701cdec3aad8eadcd899eca3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://77aba04ca46e97dad56c1e3041c0e04c22689fcfd4ca6f8992b903b874e8a359",
-				"dweb:/ipfs/QmS2XU99wDP4gsVfZv4yFSwTgafRRE7vWnmxDjouheTzAW"
+				"bzz-raw://b611d39ca153ac8a8d64cf2d81c7a6abef14532e1df717176e5537c1d94d7b48",
+				"dweb:/ipfs/QmcPz1SFgrvHbr6CNZep3uR2BPaHsxCuQDbM187EHQH5Ga"
 			]
 		}
 	},
