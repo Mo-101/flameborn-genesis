@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.24+commit.e11b9ed9"
+		"version": "0.8.30+commit.73712a01"
 	},
 	"language": "Solidity",
 	"output": {
@@ -205,7 +205,7 @@
 		"compilationTarget": {
 			"contracts/DonationRouter.sol": "DonationRouter"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "prague",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -226,19 +226,19 @@
 			]
 		},
 		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
-			"keccak256": "0xa535a5df777d44e945dd24aa43a11e44b024140fc340ad0dfe42acf4002aade1",
+			"keccak256": "0xaa3d2a70a74dd14908649a2be96b089df8fef5257b26759ff6bb0822a6054543",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
-				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
+				"bzz-raw://f71c46b4039c501469bca9a8d4bf957dd96ebb0d6ed72436dab19bbbd22bab49",
+				"dweb:/ipfs/QmRDkkwkw4pen7h9x5r5gJgsFuevFDiJHCG3rRUmxdd7iL"
 			]
 		},
 		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"keccak256": "0x8c7d0d3ac7052d0f8f8d9d7fe006cde620b76107a0d911b23d85419416dc02ef",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
-				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+				"bzz-raw://fb27991ae3a692e616486604cbc5dc745d10a7c57e08b54d98694d608c6674e5",
+				"dweb:/ipfs/QmbgFvuuQQzat3C82dtkoNwZKZSHBijbzCpdKQXM7AHdZJ"
 			]
 		},
 		"contracts/DonationRouter.sol": {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.3.0) (token/ERC721/extensions/ERC721URIStorage.sol)
 
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import {ERC721} from "../ERC721.sol";
 import {Strings} from "../../../utils/Strings.sol";
@@ -32,7 +32,7 @@ abstract contract ERC721URIStorage is IERC4906, ERC721 {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        _requireOwned(tokenId);
+        require(_exists(tokenId), "ERC721: URI query for nonexistent token");
 
         string memory _tokenURI = _tokenURIs[tokenId];
         string memory base = _baseURI();

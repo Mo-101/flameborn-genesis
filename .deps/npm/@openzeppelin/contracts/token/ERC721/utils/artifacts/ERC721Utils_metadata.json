@@ -1,0 +1,62 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Library that provide common ERC-721 utility functions. See https://eips.ethereum.org/EIPS/eip-721[ERC-721]. _Available since v5.1._",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			".deps/npm/@openzeppelin/contracts/token/ERC721/utils/ERC721Utils.sol": "ERC721Utils"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		".deps/npm/@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+			"keccak256": "0x20de92b74687fac553a39e6f3677c42494533dd5548ad53118c76c92cad6d24d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://893d3d0226218c89e1974f4011cf034f080a6186951b1c6f9976a33568debc59",
+				"dweb:/ipfs/QmcAB7UuZjcTMVrUbdTTniQX9FbJ1ubCa4QjoWbAZQc6KP"
+			]
+		},
+		".deps/npm/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+			"keccak256": "0xa82b58eca1ee256be466e536706850163d2ec7821945abd6b4778cfb3bee37da",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e75cf83beb757b8855791088546b8337e9d4684e169400c20d44a515353b708",
+				"dweb:/ipfs/QmYvPafLfoquiDMEj7CKHtvbgHu7TJNPSVPSCjrtjV8HjV"
+			]
+		},
+		".deps/npm/@openzeppelin/contracts/token/ERC721/utils/ERC721Utils.sol": {
+			"keccak256": "0x2c62c59926f189e9d851c681225ce8bc54af1f7f241143d192103129d4330404",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://aa56696ea49a90910411076946ace4151864bb33c137fc6fdfba494a68583c50",
+				"dweb:/ipfs/QmZPSpB99EPpuu3gutff1jG8njUYURtnSzPMUsNwa8a8ZV"
+			]
+		}
+	},
+	"version": 1
+}
