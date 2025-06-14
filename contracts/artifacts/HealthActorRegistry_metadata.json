@@ -670,11 +670,11 @@
 			]
 		},
 		"contracts/HealthActorRegistry.sol": {
-			"keccak256": "0x1d98f997270192343ad9cce12e48a67e5c49b7c17f5be8c795644fd23f75ebcf",
+			"keccak256": "0x47871b5af1d0a307ac337e8ea1457adce4fe87472f4022ae92e2502d7a98398f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dfaed106e5e6661d76c8a9b2d944e347a342581a7d342dff250740b6e46729e8",
-				"dweb:/ipfs/QmWdoDSaD3fUCtpF1m6bAxXKJK46he7Xet57FpXt1EXgE3"
+				"bzz-raw://9e0caf311329be8bfa417797754591a4847c5d08718ee28377c22a76b840c41d",
+				"dweb:/ipfs/QmPGjzrgsZ7dHsogtgCjMWFhVygzhNQoEYB8jb7qrnwSnq"
 			]
 		}
 	},

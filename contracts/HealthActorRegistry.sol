@@ -150,7 +150,7 @@ contract HealthActorRegistry is AccessControl {
         return address(this).balance;
     }
 
-    function tokenURIForActor(Role role, string memory name) internal pure returns (string memory) {
+    function tokenURIForActor(Role, string memory name) internal pure returns (string memory) {
         // Example metadata logic (update to return real IPFS/URI)
         return string(abi.encodePacked("https://example.com/metadata/", name));
     }
