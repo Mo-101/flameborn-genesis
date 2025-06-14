@@ -604,7 +604,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/FlameBorn Token.sol": "FlamebornToken"
+			"contracts/FlameBornToken.sol": "FlamebornToken"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -706,12 +706,12 @@
 				"dweb:/ipfs/QmcEW85JRzvDkQggxiBBLVAasXWdkhEysqypj9EaB6H2g6"
 			]
 		},
-		"contracts/FlameBorn Token.sol": {
-			"keccak256": "0xff63a35a786829fb0ca9936515722819ac4015f3104f6c2514d7f9a68c21823e",
+		"contracts/FlameBornToken.sol": {
+			"keccak256": "0x1139ed0059f1e851bf109cc3fb779d1ac8179d0f472e61f03e9119da8edf3116",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a4536ea7225188ae103ccac8ed18aa5177ec470a7b69608245a19671a45f76ee",
-				"dweb:/ipfs/QmWD1oYZp1fo3Cbin8Mgcp2cFPJbieP3y3AVZ3ExcEQDMV"
+				"bzz-raw://b9c86410037dcf2c3ad22238c4e9c1734d7b643fba944aea7ea880dd4f114299",
+				"dweb:/ipfs/Qme1aGsJ68XP3N5WRELGc77grSmXNfqdtZYAnRkM5GV9bG"
 			]
 		}
 	},
