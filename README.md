@@ -1,4 +1,5 @@
-# flameborn-genesis
+# MoStar Industries
+
 # 🌍 Flameborn Token (FLB)
 
 **"Life is Simple. Only Decide."** — Flameborn’s guiding motto  
