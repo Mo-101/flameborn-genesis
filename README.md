@@ -1,4 +1,4 @@
-# MoStar Industries
+# MoStar Industries # Beyond Bounds #
 
 # 🌍 Flameborn Token (FLB)
 
