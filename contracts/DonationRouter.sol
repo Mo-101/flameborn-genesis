@@ -1,82 +1,105 @@
 // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-pragma solidity ^0.8.24;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+// ======================
+// DonationRouter.sol (V2 VAL Implementation)
+// ======================
+contract DonationRouter is AccessControl, ReentrancyGuard {
+    bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+    
+    FlameBornToken public flbToken;
+    HealthActorRegistry public registry;
+    
+    struct Escrow {
+        address donor;
+        address facility;
+        uint256 amount;
+        bool validated;
+    }
+    
+    Escrow[] public escrows;
+    address public treasury;
+    
+    event DonationEscrowed(uint256 indexed escrowId, address indexed donor, address indexed facility);
+    event InterventionValidated(uint256 indexed escrowId, string proof);
 
-interface IFlamebornToken {
-    function mint(address to, uint256 amount) external;
+    constructor(address _token, address _registry, address _treasury) {
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(VALIDATOR_ROLE, msg.sender);
+        
+        flbToken = FlameBornToken(_token);
+        registry = HealthActorRegistry(_registry);
+        treasury = _treasury;
+    }
+
+    // Donate to facility (funds escrowed)
+    function donate(address facility) external payable nonReentrant {
+        require(registry.actors(facility).verified, "Unverified facility");
+        require(msg.value > 0, "Donation required");
+        
+        uint256 escrowId = escrows.length;
+        escrows.push(Escrow({
+            donor: msg.sender,
+            facility: facility,
+            amount: msg.value,
+            validated: false
+        }));
+        
+        emit DonationEscrowed(escrowId, msg.sender, facility);
+    }
+
+    // VAL: Validate intervention and release funds
+    function validateIntervention(
+        uint256 escrowId,
+        string memory proof,
+        uint256 successUnits
+    ) external onlyRole(VALIDATOR_ROLE) nonReentrant {
+        require(escrowId < escrows.length, "Invalid escrow");
+        Escrow storage escrow = escrows[escrowId];
+        require(!escrow.validated, "Already validated");
+        
+        escrow.validated = true;
+        
+        // 1. Record intervention in registry
+        registry.recordIntervention(escrow.facility, proof, successUnits);
+        
+        // 2. Allocate funds (V2 percentages)
+        uint256 toFacility = (escrow.amount * 70) / 100;
+        uint256 toGuardians = (escrow.amount * 10) / 100;
+        uint256 toPlatform = (escrow.amount * 10) / 100;
+        uint256 toEmergency = (escrow.amount * 5) / 100;
+        uint256 toScrolls = (escrow.amount * 5) / 100;
+        
+        // 3. Fund transfers
+        payable(escrow.facility).transfer(toFacility);
+        payable(treasury).transfer(toGuardians + toPlatform + toEmergency + toScrolls);
+        
+        // 4. Mint FLB to donor (post-validation)
+        flbToken.mintAfterValidation(escrow.donor, escrow.amount, proof);
+        
+        emit InterventionValidated(escrowId, proof);
+    }
+
+    // Youth reward distribution
+    function rewardYouth(
+        address youth,
+        uint256 amount,
+        string memory actionType
+    ) external onlyRole(VALIDATOR_ROLE) {
+        flbToken.rewardYouthAction(youth, amount, actionType);
+    }
 }
 
-interface IHealthActorRegistry {
-    function isActorVerified(address actor) external view returns (bool);
+// Interfaces for type safety
+interface FlameBornToken {
+    function mintAfterValidation(address to, uint256 amount, string memory interventionProof) external;
+    function rewardYouthAction(address youth, uint256 amount, string memory actionType) external;
 }
 
-// Updated contract to inherit from Ownable and ReentrancyGuard.
-// Note: Ownable no longer requires a constructor argument in v5+.
-abstract contract DonationRouter is Ownable, ReentrancyGuard {
-    IFlamebornToken public token;
-    IHealthActorRegistry public registry;
-
-    event DonationProcessed(
-        address indexed donor,
-        address indexed recipient,
-        uint256 amountDonated,
-        uint256 tokensMinted
-    );
-
-    /**
-     * @dev Constructor to initialize the contract with addresses for the token and registry.
-     * The deployer of this contract will automatically become the owner due to Ownable v5+.
-     * @param _token The address of the IFlamebornToken contract.
-     * @param _registry The address of the IHealthActorRegistry contract.
-     */
-    constructor(address _token, address _registry) {
-        // Ownable's constructor is implicitly called, setting msg.sender as owner.
-        require(_token != address(0), "DonationRouter: Invalid token address");
-        require(_registry != address(0), "DonationRouter: Invalid registry address");
-        token = IFlamebornToken(_token);
-        registry = IHealthActorRegistry(_registry);
-    }
-
-    /**
-     * @dev Fallback function to accept Ether directly to the contract.
-     * This makes the contract able to receive Ether without a function call.
-     */
-    receive() external payable {}
-
-    /**
-     * @dev Allows a user to donate Ether to a verified recipient and receive FLB tokens.
-     * The donated Ether is sent to the recipient, and an equal amount of FLB tokens
-     * is minted to the donor.
-     * @param recipient The address of the health actor to receive the donation.
-     */
-    function donate(address recipient) external payable nonReentrant {
-        require(msg.value > 0, "DonationRouter: Donation amount must be > 0");
-        require(recipient != address(0), "DonationRouter: Recipient address cannot be zero"); // Added check
-        require(registry.isActorVerified(recipient), "DonationRouter: Recipient not verified");
-
-        // Mint FLB tokens to donor (1:1 with wei)
-        // Ensure the token contract has allowance or is configured to allow minting by this contract.
-        token.mint(msg.sender, msg.value);
-
-        // Send funds to recipient
-        (bool success, ) = payable(recipient).call{value: msg.value}("");
-        require(success, "DonationRouter: Ether transfer failed");
-
-        emit DonationProcessed(msg.sender, recipient, msg.value, msg.value);
-    }
-
-    /**
-     * @dev Allows the owner to update the addresses of the token and registry contracts.
-     * @param newToken The new address for the IFlamebornToken contract.
-     * @param newRegistry The new address for the IHealthActorRegistry contract.
-     */
-    function updateContracts(address newToken, address newRegistry) external onlyOwner {
-        require(newToken != address(0), "DonationRouter: New token address cannot be zero"); // Added check
-        require(newRegistry != address(0), "DonationRouter: New registry address cannot be zero"); // Added check
-        token = IFlamebornToken(newToken);
-        registry = IHealthActorRegistry(newRegistry);
-    }
+interface HealthActorRegistry {
+    function actors(address actor) external view returns (bool verified, string memory segment, uint256 successCount, uint256 upgradeLevel);
+    function recordIntervention(address facility, string memory proof, uint256 successIncrement) external;
 }

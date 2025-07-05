@@ -1,18 +1,26 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// You need to deploy/import this separately
-interface HealthIDNFT {
+interface IHealthIDNFT {
     function mintCredential(address to, uint256 tokenId, string memory uri) external;
 }
 
-contract HealthActorRegistry is AccessControl {
-    using Address for address payable;
 
+// ======================
+// HealthActorRegistry.sol
+// ======================
+contract HealthActorRegistry is AccessControl {
+    error AdminAddressRequired();
+    error TokenRequired();
+    error NFTRequired();
+    error DonationZero();
+    error InvalidActorAddress();
+    error ArrayLengthMismatch();
+    error NoFundsAvailable();
+ 
     bytes32 public constant REGISTRAR_ROLE = keccak256("REGISTRAR_ROLE");
 
     uint256 public totalDonations;
@@ -38,7 +46,7 @@ contract HealthActorRegistry is AccessControl {
     mapping(address => Actor) public actors;
 
     IERC20 public rewardsToken;
-    HealthIDNFT public credentialNFT;
+    IHealthIDNFT public credentialNFT;
 
     uint256 public constant ACTOR_REWARD = 10 * 10**18;
     uint256 public constant DONATION_REWARD_RATE = 100; // 100 FLB per ETH
@@ -50,11 +58,11 @@ contract HealthActorRegistry is AccessControl {
     constructor(
         address admin,
         IERC20 _rewardsToken,
-        HealthIDNFT _credentialNFT
+        IHealthIDNFT _credentialNFT
     ) {
-        require(admin != address(0), "Admin address required");
-        require(address(_rewardsToken) != address(0), "Token required");
-        require(address(_credentialNFT) != address(0), "NFT required");
+        if (admin == address(0)) revert AdminAddressRequired();
+        if (address(_rewardsToken) == address(0)) revert TokenRequired();
+        if (address(_credentialNFT) == address(0)) revert NFTRequired();
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(REGISTRAR_ROLE, admin);
@@ -64,7 +72,7 @@ contract HealthActorRegistry is AccessControl {
     }
 
     function donateToHealthActors() external payable {
-        require(msg.value > 0, "Donation must be greater than 0");
+        if (msg.value == 0) revert DonationZero();
         totalDonations += msg.value;
         donorBalances[msg.sender] += msg.value;
         emit DonationReceived(msg.sender, msg.value);
@@ -81,7 +89,7 @@ contract HealthActorRegistry is AccessControl {
         string calldata licenseId,
         string calldata phone
     ) external onlyRole(REGISTRAR_ROLE) {
-        require(actorAddress != address(0), "Invalid actor address");
+        if (actorAddress == address(0)) revert InvalidActorAddress();
 
         actors[actorAddress] = Actor({
             verified: true,
@@ -111,13 +119,12 @@ contract HealthActorRegistry is AccessControl {
         string[] calldata licenseIds,
         string[] calldata phones
     ) external onlyRole(REGISTRAR_ROLE) {
-        require(
-            addresses.length == roles.length &&
-            addresses.length == names.length &&
-            addresses.length == licenseIds.length &&
-            addresses.length == phones.length,
-            "Array length mismatch"
-        );
+        if (
+            addresses.length != roles.length ||
+            addresses.length != names.length ||
+            addresses.length != licenseIds.length ||
+            addresses.length != phones.length
+        ) revert ArrayLengthMismatch();
 
         for (uint256 i = 0; i < addresses.length; i++) {
             actors[addresses[i]] = Actor({
@@ -142,8 +149,8 @@ contract HealthActorRegistry is AccessControl {
 
     function withdrawDonations(address payable recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
         uint256 balance = address(this).balance;
-        require(balance > 0, "No funds available");
-        recipient.sendValue(balance);
+        if (balance == 0) revert NoFundsAvailable();
+        (bool success, ) = recipient.call{value: balance}("");
     }
 
     function getContractBalance() public view returns (uint256) {

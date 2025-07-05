@@ -1,12 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+pragma solidity ^0.8.20;
 
 /**
  * @title HealthIDNFT
@@ -45,77 +38,33 @@ contract HealthIDNFT is ERC721URIStorage, AccessControl, ReentrancyGuard {
         uint256 entropy
     );
 
-    /**
-     * @dev Constructor to initialize the contract
-     * @param admin Address that will receive admin role
-     */
     constructor(address admin) ERC721("HealthIDNFT", "HEALTH") {
-        require(admin != address(0), "Admin required");
-        
+        if (admin == address(0)) revert AdminRequired();
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(MULTISIG_ROLE, msg.sender);
         _grantRole(EMERGENCY_ROLE, admin);
     }
-    
-    /**
-     * @dev Disables token approval (soulbound property)
-     */
+
     function approve(
         address /* spender */,
         uint256 /* tokenId */
     ) public override(ERC721, IERC721) pure {
-        revert("Soulbound: approval not allowed");
-    }
-    
-    /**
-     * @dev Override transferFrom to enforce soulbound properties
-     */
-    function transferFrom(
-        address from, 
-        address to, 
-        uint256 tokenId
-    ) public override(ERC721, IERC721) {
-        require(from == msg.sender || _isApprovedOrOwner(msg.sender, tokenId), "Not approved or owner");
-        _transfer(from, to, tokenId);
-    }
-    
-    /**
-     * @dev Disables setApprovalForAll (soulbound property)
-     */
+
     function setApprovalForAll(
         address /* operator */,
         bool /* approved */
     ) public override(ERC721, IERC721) pure {
-        revert("Soulbound: approval not allowed");
-    }
-    
-    /**
-     * @dev Override safeTransferFrom to enforce soulbound properties
-     */
-    function safeTransferFrom(
-        address from, 
-        address to, 
-        uint256 tokenId
-    ) public override(ERC721, IERC721) {
-        safeTransferFrom(from, to, tokenId, "");
-    }
-    
-    /**
-     * @dev Override safeTransferFrom with data to enforce soulbound properties
-     */
+
     function safeTransferFrom(
         address from, 
         address to, 
         uint256 tokenId, 
         bytes memory data
     ) public override(ERC721, IERC721) {
-        require(from == msg.sender || _isApprovedOrOwner(msg.sender, tokenId), "Not approved or owner");
+        if (!(from == msg.sender || getApproved(tokenId) == msg.sender || isApprovedForAll(from, msg.sender))) revert NotApprovedOrOwner();
         _safeTransfer(from, to, tokenId, data);
     }
-    
-    /**
-     * @dev Provide interface support for ERC721 and AccessControl
-     */
+
     function supportsInterface(bytes4 interfaceId) public view override(ERC721URIStorage, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
