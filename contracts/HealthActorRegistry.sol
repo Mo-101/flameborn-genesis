@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -147,11 +147,14 @@ contract HealthActorRegistry is AccessControl {
         }
     }
 
-    function withdrawDonations(address payable recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        function withdrawDonations(address payable recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
         uint256 balance = address(this).balance;
         if (balance == 0) revert NoFundsAvailable();
+
         (bool success, ) = recipient.call{value: balance}("");
+        require(success, "Withdraw failed");
     }
+
 
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
