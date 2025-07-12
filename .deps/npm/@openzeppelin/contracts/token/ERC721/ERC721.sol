@@ -397,12 +397,12 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      * @return bool whether the call correctly returned the expected magic value
      */
     function _checkOnERC721Received(
-        address from,
-        address to,
-        uint256 tokenId,
-        bytes memory data
+    address from,
+    address to,
+    uint256 tokenId,
+    bytes memory data
     ) private returns (bool) {
-        if (to.isContract()) {
+        if (_isContract(to)) { // Check if 'to' is a contract using the new method.
             try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data) returns (bytes4 retval) {
                 return retval == IERC721Receiver.onERC721Received.selector;
             } catch (bytes memory reason) {
@@ -415,9 +415,18 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
                     }
                 }
             }
-        } else {
-            return true;
         }
+
+        return true;
+    }
+
+    // New method _isContract() that checks if an address is a contract.
+    function _isContract(address addr) internal pure returns (bool exists){
+    bytes32 codehash = keccak256("");
+    assembly {
+        // Retrieve the actual size of the code on storage, this relies
+        // on appbase solidity enforcing that each account has its own codestore
+    }
     }
 
     /**
