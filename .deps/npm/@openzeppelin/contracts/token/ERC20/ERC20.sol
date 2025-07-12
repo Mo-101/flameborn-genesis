@@ -3,7 +3,7 @@
 
 pragma solidity ^0.8.24;
 
-import {IERC20} from "./IERC20.sol";
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/extensions/draft-IERC1822.sol';
 import {IERC20Metadata} from "./extensions/IERC20Metadata.sol";
 import {Context} from "../../utils/Context.sol";
 import {IERC20Errors} from "../../interfaces/draft-IERC6093.sol";
