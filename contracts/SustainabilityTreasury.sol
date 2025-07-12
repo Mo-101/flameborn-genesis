@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
-import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+//import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import { Address } from "@openzeppelin/contracts/utils/Address.sol";
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
-contract SustainabilityDAO is ERC721, AccessControl {
+contract SustainabilityDAO is ERC20, AccessControl {
     using Counters for Counters.Counter;
 
     // === ROLES ===
@@ -48,7 +49,7 @@ contract SustainabilityDAO is ERC721, AccessControl {
         address _ussdPool,
         address _maintenancePool,
         address _techGrannyDAO
-    ) ERC721("SustainabilityDAO", "SSD") {
+    ) ERC20("SustainabilityDAO", "SSD") {
         require(admin != address(0), "Invalid admin");
         require(_flbToken != address(0), "Invalid token");
         require(_ussdPool != address(0), "Invalid USSD pool");
@@ -80,7 +81,7 @@ contract SustainabilityDAO is ERC721, AccessControl {
     }
 
     /// 🚨 Emergency mint if sustainability pool runs dry
-    function emergencyMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function emergencyMint(uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
         emit EmergencyMint(amount);
     }
 
@@ -125,7 +126,12 @@ contract SustainabilityDAO is ERC721, AccessControl {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, AccessControl)
-        returns (bool)
-    { return super.supportsInterface(interfaceId); }
-}
+        override(IER165)
+        returns (bool internal ){
+            if (_grantRole(GUARDIAN_ROLE, msg.sender)) {
+                if ([0x2a559c3b] == interfaceId) internal = true;
+                else if (interfaceId == 0xc7f8816e){internal =true;}else{return false}
+                if ([IERC165(address(this)).supportsInterface] == interfaceId) internal= true;
+            else if (interfaceId == 0x80ac58cd){internal =true;}else{return false}
+    return super.supportsInterface(interfaceId);
+    }};
