@@ -1,79 +1,140 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.1.0) (token/ERC20/IERC20.sol)
-
 pragma solidity ^0.8.24;
 
-/**
- * @dev Interface of the ERC-20 standard as defined in the ERC.
- */
-interface IERC20 {
-    /**
-     * @dev Emitted when `value` tokens are moved from one account (`from`) to
-     * another (`to`).
-     *
-     * Note that `value` may be zero.
-     */
-    event Transfer(address indexed from, address indexed to, uint256 value);
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-    /**
-     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
-     * a call to {approve}. `value` is the new allowance.
-     */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+/// @title FlameBornToken
+/// @notice Soulbound identity token for verified African youth & social validators
+contract FlameBornToken is ERC20, AccessControl {
+    // --- Custom Errors (Gas-Saving) ---
+    error ZeroAddress();
+    error AlreadyRegistered();
+    error NotRegistered();
+    error EmptyString();
+    error TransferDisabled();
+    error MintingClosed();
+    error InvalidAmount();
 
-    /**
-     * @dev Returns the value of tokens in existence.
-     */
-    function totalSupply() external view returns (uint256);
+    // --- Role Identifiers ---
+    bytes32 private constant DAO_ROLE = keccak256("DAO_ROLE");
+    bytes32 private constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+    bytes32 private constant YOUTH_ROLE = keccak256("YOUTH_ROLE");
 
-    /**
-     * @dev Returns the value of tokens owned by `account`.
-     */
-    function balanceOf(address account) external view returns (uint256);
+    // --- Soulbinding / Identity ---
+    mapping(address => string) private _africanID;
+    mapping(address => bool) private _soulbound;
 
-    /**
-     * @dev Moves a `value` amount of tokens from the caller's account to `to`.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits a {Transfer} event.
-     */
-    function transfer(address to, uint256 value) external returns (bool);
+    // --- Initialization Flag ---
+    bool public initialMintComplete;
 
-    /**
-     * @dev Returns the remaining number of tokens that `spender` will be
-     * allowed to spend on behalf of `owner` through {transferFrom}. This is
-     * zero by default.
-     *
-     * This value changes when {approve} or {transferFrom} are called.
-     */
-    function allowance(address owner, address spender) external view returns (uint256);
+    // --- Events ---
+    event AfricanIDRegistered(address indexed user, string idHash);
+    event ValidatorMint(address indexed to, uint256 amount, string proof);
+    event YouthReward(address indexed to, uint256 amount, string action);
+    event ControlledMint(address indexed to, uint256 amount);
+    event FLBBurned(uint256 amount);
+    event SoulprintIssued(address indexed user, string hash, uint256 weight, address indexed issuedBy);
 
-    /**
-     * @dev Sets a `value` amount of tokens as the allowance of `spender` over the
-     * caller's tokens.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * IMPORTANT: Beware that changing an allowance with this method brings the risk
-     * that someone may use both the old and the new allowance by unfortunate
-     * transaction ordering. One possible solution to mitigate this race
-     * condition is to first reduce the spender's allowance to 0 and set the
-     * desired value afterwards:
-     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-     *
-     * Emits an {Approval} event.
-     */
-    function approve(address spender, uint256 value) external returns (bool);
+    /// @notice Constructor — mints initial supply to DAO & sets admin roles
+    /// @param initialSupply Initial token supply (whole tokens, not wei)
+    constructor(uint256 initialSupply) payable ERC20("FlameBorn Token", "FLB") {
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DAO_ROLE, msg.sender);
+        _grantRole(VALIDATOR_ROLE, msg.sender);
+        _grantRole(YOUTH_ROLE, msg.sender);
 
-    /**
-     * @dev Moves a `value` amount of tokens from `from` to `to` using the
-     * allowance mechanism. `value` is then deducted from the caller's
-     * allowance.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits a {Transfer} event.
-     */
-    function transferFrom(address from, address to, uint256 value) external returns (bool);
+        uint256 fullAmount = initialSupply * 1e18;
+        _mint(msg.sender, fullAmount);
+        _soulbound[msg.sender] = true;
+        initialMintComplete = true;
+    }
+
+    /// @dev Overrides ERC20 to disable transfers
+    function _update(address from, address to, uint256 value) internal override {
+        if (from != address(0) && to != address(0)) revert TransferDisabled();
+        super._update(from, to, value);
+
+        if (from == address(0) && !_soulbound[to]) {
+            _soulbound[to] = true;
+        }
+    }
+
+    /// @notice Register an African ID (once only)
+    function registerAfricanID(string calldata idHash) external {
+        if (bytes(idHash).length == 0) revert EmptyString();
+        if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered();
+
+        _africanID[msg.sender] = idHash;
+        emit AfricanIDRegistered(msg.sender, idHash);
+    }
+
+    /// @notice Validator mints tokens to a verified African with audit metadata
+    function mintAfterValidation(address to, uint256 amount, string calldata proof)
+        external onlyRole(VALIDATOR_ROLE)
+    {
+        if (to == address(0)) revert ZeroAddress();
+        if (!_isAfrican(to)) revert NotRegistered();
+        if (amount == 0) revert InvalidAmount();
+        if (bytes(proof).length == 0) revert EmptyString();
+
+        _mint(to, amount);
+        emit ValidatorMint(to, amount, proof);
+    }
+
+    /// @notice Youth reward distribution for verified social participation
+    function rewardYouthAction(address youth, uint256 amount, string calldata action)
+        external onlyRole(YOUTH_ROLE)
+    {
+        if (youth == address(0)) revert ZeroAddress();
+        if (!_isAfrican(youth)) revert NotRegistered();
+        if (amount == 0) revert InvalidAmount();
+        if (bytes(action).length == 0) revert EmptyString();
+
+        _mint(youth, amount);
+        emit YouthReward(youth, amount, action);
+    }
+
+    /// @notice Burn FLB tokens from a user
+    function burn(address from, uint256 amount) external onlyRole(DAO_ROLE) {
+        if (from == address(0)) revert ZeroAddress();
+        _burn(from, amount);
+        emit FLBBurned(amount);
+    }
+
+    /// @notice Admin-controlled minting for initialization (one-time only)
+    function controlledMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (to == address(0)) revert ZeroAddress();
+        if (initialMintComplete) revert MintingClosed();
+
+        _mint(to, amount);
+        initialMintComplete = true;
+        _soulbound[to] = true;
+        emit ControlledMint(to, amount);
+    }
+
+    /// @notice DAO can issue symbolic soulprint metadata
+    function issueSoulprint(address user, string calldata soulHash, uint256 weight)
+        external onlyRole(DAO_ROLE)
+    {
+        if (!_isAfrican(user)) revert NotRegistered();
+        if (bytes(soulHash).length == 0) revert EmptyString();
+
+        emit SoulprintIssued(user, soulHash, weight, msg.sender);
+    }
+
+    /// @notice Returns registered African ID hash of user
+    function getAfricanID(address account) external view returns (string memory) {
+        return _africanID[account];
+    }
+
+    /// @dev Internal check for African ID registration
+    function _isAfrican(address user) internal view returns (bool) {
+        return bytes(_africanID[user]).length != 0;
+    }
+
+    /// @notice Override decimals to return 18
+    function decimals() public pure override returns (uint8) {
+        return 18;
+    }
 }
