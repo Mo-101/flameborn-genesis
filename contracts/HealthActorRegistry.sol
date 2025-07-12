@@ -140,11 +140,19 @@ contract HealthActorRegistry is AccessControl {
         }
     }
 
-    function withdrawDonations(address payable recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        function withdrawDonations(address payable recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
         uint256 balance = address(this).balance;
+<<<<<<< HEAD
         require(balance > 0, "No funds available");
         recipient.sendValue(balance);
+=======
+        if (balance == 0) revert NoFundsAvailable();
+
+        (bool success, ) = recipient.call{value: balance}("");
+        require(success, "Withdraw failed");
+>>>>>>> c9874bb596487dce653a969c1777b6d1101d4a97
     }
+
 
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
