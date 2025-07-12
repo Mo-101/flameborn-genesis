@@ -6,10 +6,10 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**
  * @title FlameBornToken (Soulbound ERC20)
- * @dev Non-transferable (soulbound) ERC20 with custom roles and African identity enforcement.
- * - DAO_ROLE is core for on-chain governance and funding of African health/youth projects.
- * - Transfers are permanently disabled (except mint/burn by validators).
- * - All important actions (mint, African ID registration, youth reward) emit events for analytics.
+ * @dev Non-transferable (soulbound) ERC20 with roles for validators, DAO, and youth incentive.
+ * - Transfers disabled permanently (soulbound).
+ * - African ID registration tied to mint eligibility.
+ * - Integrated with analytics events and social impact tracking.
  */
 contract FlameBornToken is ERC20, AccessControl {
     // === Roles ===
@@ -17,37 +17,38 @@ contract FlameBornToken is ERC20, AccessControl {
     bytes32 public constant DAO_ROLE = keccak256("DAO_ROLE");
     bytes32 public constant YOUTH_ROLE = keccak256("YOUTH_ROLE");
 
-    // === Soulbound and ID Storage ===
+    // === Identity & Soulbinding ===
     mapping(address => bool) private _soulbound;
     mapping(address => string) private _africanID;
+
+    // === State flags ===
+    bool public initialMintComplete = false;
 
     // === Events ===
     event AfricanIDRegistered(address indexed account, string idHash);
     event MintedAfterValidation(address indexed to, uint256 amount, string interventionProof);
     event YouthActionRewarded(address indexed youth, uint256 amount, string actionType);
+    event SymbolicSoulprint(address indexed user, string hash, uint256 weight, address issuedBy, uint256 timestamp);
+    event FLBBurned(uint256 amount);
+    event ControlledMint(address indexed to, uint256 amount);
 
     /**
-     * @dev Initializes the FLB token.
-     * - Sets admin, validator, DAO roles to deployer.
-     * - Mints genesis supply to deployer (who becomes soulbound).
+     * @notice Constructor with soulbound initialization
+     * @param initialSupply Token amount to mint to deployer (multisig or treasury)
      */
     constructor(uint256 initialSupply) ERC20("Flameborn Token", "FLB") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(VALIDATOR_ROLE, msg.sender);
         _grantRole(DAO_ROLE, msg.sender);
-        _mint(msg.sender, initialSupply * (10 ** decimals())); // Standard: 18 decimals
+        _mint(msg.sender, initialSupply * (10 ** decimals()));
         _soulbound[msg.sender] = true;
+        initialMintComplete = true;
     }
 
-    /**
-     * @dev Override ERC20/AccessControl update to enforce soulbound logic.
-     * - Blocks all transfers (except mint and burn).
-     * - Mints make the recipient soulbound forever.
-     */
-        function _update(address from, address to, uint256 value)
+    /// 🔒 Soulbound logic: disable transfers
+    function _update(address from, address to, uint256 value)
         internal
         override(ERC20)
-
     {
         if (from != address(0) && to != address(0)) {
             revert("FLB: Token is soulbound and non-transferable");
@@ -56,65 +57,75 @@ contract FlameBornToken is ERC20, AccessControl {
         if (from == address(0) && to != address(0)) {
             _soulbound[to] = true;
         }
-        // NOTE: Burning does NOT reset soulbound status (intentional).
     }
 
-    /**
-     * @dev Register an African ID (hash) for caller, only once.
-     * Emits AfricanIDRegistered.
-     */
+    /// 📇 Register unique African ID hash once per wallet
     function registerAfricanID(string memory idHash) external {
-        require(bytes(_africanID[msg.sender]).length == 0, "FLB: African ID already registered");
-        require(bytes(idHash).length > 0, "FLB: ID hash cannot be empty");
+        require(bytes(_africanID[msg.sender]).length == 0, "FLB: ID already registered");
+        require(bytes(idHash).length > 0, "FLB: Invalid ID");
         _africanID[msg.sender] = idHash;
         emit AfricanIDRegistered(msg.sender, idHash);
     }
 
-    /**
-     * @dev Validator mints FLB after validating an intervention (requires African recipient).
-     * Emits MintedAfterValidation.
-     */
+    /// ✅ Validator-controlled minting with audit metadata
     function mintAfterValidation(
         address to,
         uint256 amount,
         string calldata interventionProof
     ) external onlyRole(VALIDATOR_ROLE) {
-        require(_isAfrican(to), "FLB: Only African recipients allowed");
-        require(amount > 0, "FLB: Mint amount must be greater than zero");
-        require(bytes(interventionProof).length > 0, "FLB: Intervention proof cannot be empty");
+        require(_isAfrican(to), "FLB: Must be registered African");
+        require(amount > 0, "FLB: Zero amount");
+        require(bytes(interventionProof).length > 0, "FLB: Missing proof");
 
         _mint(to, amount);
         emit MintedAfterValidation(to, amount, interventionProof);
     }
 
-    /**
-     * @dev Internal helper: checks if address has registered an African ID.
-     */
-    function _isAfrican(address account) internal view returns (bool) {
-        return bytes(_africanID[account]).length > 0;
-    }
-
-    /**
-     * @dev Youth reward. YOUTH_ROLE only. Must be African, logs action.
-     * Emits YouthActionRewarded.
-     */
+    /// 🎓 Incentive minting for youth participation
     function rewardYouthAction(
         address youth,
         uint256 amount,
         string memory actionType
     ) external onlyRole(YOUTH_ROLE) {
-        require(_isAfrican(youth), "FLB: Only African youth can be rewarded");
-        require(amount > 0, "FLB: Reward amount must be greater than zero");
-        require(bytes(actionType).length > 0, "FLB: Action type cannot be empty");
+        require(_isAfrican(youth), "FLB: Must be African youth");
+        require(amount > 0, "FLB: Zero reward");
+        require(bytes(actionType).length > 0, "FLB: Action required");
 
         _mint(youth, amount);
         emit YouthActionRewarded(youth, amount, actionType);
     }
 
-    /**
-     * @dev Get registered African ID hash for an address.
-     */
+    /// 🔥 Burn FLB tokens (voluntary)
+    function burn(address from, uint256 amount) external onlyRole(DAO_ROLE) {
+        _burn(from, amount);
+        emit FLBBurned(amount);
+    }
+
+    /// 🛠 One-time controlled minting (optional)
+    function controlledMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(!initialMintComplete, "FLB: Minting closed");
+        _mint(to, amount);
+        initialMintComplete = true;
+        _soulbound[to] = true;
+        emit ControlledMint(to, amount);
+    }
+
+    /// 🔐 Internal helper: is registered African?
+    function _isAfrican(address account) internal view returns (bool) {
+        return bytes(_africanID[account]).length > 0;
+    }
+
+    /// 📜 Public getter for African ID hash
     function getAfricanID(address account) external view returns (string memory) {
         return _africanID[account];
+    }
+
+    /// 🪶 Optional: Symbolic Soulprint mint (hookable by DAO/Oracle)
+    function issueSoulprint(address user, string memory soulHash, uint256 weight)
+        external onlyRole(DAO_ROLE)
+    {
+        require(_isAfrican(user), "FLB: Not verified African");
+        require(bytes(soulHash).length > 0, "FLB: Invalid soul hash");
+        emit SymbolicSoulprint(user, soulHash, weight, msg.sender, block.timestamp);
     }
 }
