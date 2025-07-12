@@ -2,7 +2,6 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 /**
@@ -12,24 +11,8 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * - African ID registration tied to mint eligibility.
  * - Integrated with analytics events and social impact tracking.
  */
-
-/// @notice Custom errors for gas optimization
-error SoulboundToken();
-error IdAlreadyRegistered();
-error InvalidId();
-error NotAfrican();
-error ZeroAmount();
-error MissingProof();
-error AfricanYouthRequired();
-error ActionRequired();
-error MintingClosed();
-error InvalidSoulHash();
 contract FlameBornToken is ERC20, AccessControl {
-    // Chainlink timestamp aggregator (e.g., ETH/USD feed, replace with a timestamp feed if available)
-    AggregatorV3Interface public immutable chainlinkTimestamp;
-
-    // NOTE: OpenZeppelin's AccessControl uses mappings for role management, so grantRole, revokeRole, renounceRole, and getRoleAdmin are already gas-optimized and do not use unbounded loops.
-
+    
     // === Roles ===
     bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
     bytes32 public constant DAO_ROLE = keccak256("DAO_ROLE");
@@ -54,9 +37,7 @@ contract FlameBornToken is ERC20, AccessControl {
      * @notice Constructor with soulbound initialization
      * @param initialSupply Token amount to mint to deployer (multisig or treasury)
      */
-    constructor(uint256 initialSupply, address _chainlinkTimestamp) ERC20("Flameborn Token", "FLB") {
-        if (_chainlinkTimestamp == address(0)) revert InvalidMultisigAddress();
-        chainlinkTimestamp = AggregatorV3Interface(_chainlinkTimestamp);
+    constructor(uint256 initialSupply) ERC20("Flameborn Token", "FLB") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(VALIDATOR_ROLE, msg.sender);
         _grantRole(DAO_ROLE, msg.sender);
@@ -71,7 +52,7 @@ contract FlameBornToken is ERC20, AccessControl {
         override(ERC20)
     {
         if (from != address(0) && to != address(0)) {
-            revert SoulboundToken();
+            revert("FLB: Token is soulbound and non-transferable");
         }
         super._update(from, to, value);
         if (from == address(0) && to != address(0)) {
@@ -81,8 +62,8 @@ contract FlameBornToken is ERC20, AccessControl {
 
     /// 📇 Register unique African ID hash once per wallet
     function registerAfricanID(string memory idHash) external {
-        if (bytes(_africanID[msg.sender]).length != 0) revert IdAlreadyRegistered();
-        if (bytes(idHash).length == 0) revert InvalidId();
+        require(bytes(_africanID[msg.sender]).length == 0, "FLB: ID already registered");
+        require(bytes(idHash).length > 0, "FLB: Invalid ID");
         _africanID[msg.sender] = idHash;
         emit AfricanIDRegistered(msg.sender, idHash);
     }
@@ -93,9 +74,9 @@ contract FlameBornToken is ERC20, AccessControl {
         uint256 amount,
         string calldata interventionProof
     ) external onlyRole(VALIDATOR_ROLE) {
-        if (!_isAfrican(to)) revert NotAfrican();
-        if (amount == 0) revert ZeroAmount();
-        if (bytes(interventionProof).length == 0) revert MissingProof();
+        require(_isAfrican(to), "FLB: Must be registered African");
+        require(amount > 0, "FLB: Zero amount");
+        require(bytes(interventionProof).length > 0, "FLB: Missing proof");
 
         _mint(to, amount);
         emit MintedAfterValidation(to, amount, interventionProof);
@@ -107,9 +88,9 @@ contract FlameBornToken is ERC20, AccessControl {
         uint256 amount,
         string memory actionType
     ) external onlyRole(YOUTH_ROLE) {
-        if (!_isAfrican(youth)) revert AfricanYouthRequired();
-        if (amount == 0) revert ZeroAmount();
-        if (bytes(actionType).length == 0) revert ActionRequired();
+        require(_isAfrican(youth), "FLB: Must be African youth");
+        require(amount > 0, "FLB: Zero reward");
+        require(bytes(actionType).length > 0, "FLB: Action required");
 
         _mint(youth, amount);
         emit YouthActionRewarded(youth, amount, actionType);
@@ -123,7 +104,7 @@ contract FlameBornToken is ERC20, AccessControl {
 
     /// 🛠 One-time controlled minting (optional)
     function controlledMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (initialMintComplete) revert MintingClosed();
+        require(!initialMintComplete, "FLB: Minting closed");
         _mint(to, amount);
         initialMintComplete = true;
         _soulbound[to] = true;
@@ -144,10 +125,9 @@ contract FlameBornToken is ERC20, AccessControl {
     function issueSoulprint(address user, string memory soulHash, uint256 weight)
         external onlyRole(DAO_ROLE)
     {
-        if (!_isAfrican(user)) revert NotAfrican();
-        if (bytes(soulHash).length == 0) revert InvalidSoulHash();
-        (, int256 answer,,,) = chainlinkTimestamp.latestRoundData();
-        uint256 timestamp = uint256(answer);
-        emit SymbolicSoulprint(user, soulHash, weight, msg.sender, timestamp);
+        require(_isAfrican(user), "FLB: Not verified African");
+        require(bytes(soulHash).length > 0, "FLB: Invalid soul hash");
+        emit SymbolicSoulprint(user, soulHash, weight, msg.sender, block.timestamp);
     }
 }
+
