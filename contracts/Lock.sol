@@ -2,17 +2,18 @@
 pragma solidity ^0.8.24;
 
 contract Lock {
-    uint public unlockTime;
+    uint256 public unlockTime;
     address payable public owner;
 
-    event Withdrawal(uint amount, uint when);
+    event Withdrawal(uint256 amount, uint256 when);
 
-    constructor(uint _unlockTime) payable {
-     require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
+    // Custom errors for gas optimization
+    error UnlockTimeInPast();
+    error WithdrawNotReady();
+    error NotOwner();
 
+    constructor(uint256 _unlockTime) payable {
+        if (block.timestamp >= _unlockTime) revert UnlockTimeInPast();
         unlockTime = _unlockTime;
         owner = payable(msg.sender);
     }
@@ -21,8 +22,8 @@ contract Lock {
         // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
         // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
+        if (block.timestamp < unlockTime) revert WithdrawNotReady();
+        if (msg.sender != owner) revert NotOwner();
 
         emit Withdrawal(address(this).balance, block.timestamp);
 
