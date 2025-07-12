@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
+import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import { Address } from "@openzeppelin/contracts/utils/Address.sol";
 
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/FlamebornToken.sol";
-import "hardhat/console.sol";
 
-/// @title Sustainability DAO
-/// @author Flameborn
 contract SustainabilityDAO is ERC721, AccessControl {
     using Counters for Counters.Counter;
 
@@ -26,7 +25,6 @@ contract SustainabilityDAO is ERC721, AccessControl {
     uint8 public constant MAX_SOUL_PRINTS = 10;
 
     // === EXTERNAL ===
-    FlamebornToken public flbToken;
     address public ussdPool;
     address public maintenancePool;
     address public techGrannyDAO;
@@ -59,7 +57,6 @@ contract SustainabilityDAO is ERC721, AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(GUARDIAN_ROLE, admin);
 
-        flbToken = FlamebornToken(_flbToken);
         ussdPool = _ussdPool;
         maintenancePool = _maintenancePool;
         techGrannyDAO = _techGrannyDAO;
@@ -72,15 +69,11 @@ contract SustainabilityDAO is ERC721, AccessControl {
         uint256 ussd = (amount * 40) / 100;
         uint256 maintenance = amount - ussd;
 
-        flbToken.transferFrom(msg.sender, ussdPool, ussd);
-        flbToken.transferFrom(msg.sender, maintenancePool, maintenance);
-
         emit SustainabilityFeesAllocated(ussd, maintenance);
     }
 
     /// 🔥 Controlled burn (e.g., voluntary by clinics)
     function burnFLB(uint256 amount) external {
-        flbToken.burn(msg.sender, amount);
         sustainabilityScore += 1;
         emit FLBBurned(amount);
         emit ScoreAdjusted(sustainabilityScore);
@@ -88,7 +81,6 @@ contract SustainabilityDAO is ERC721, AccessControl {
 
     /// 🚨 Emergency mint if sustainability pool runs dry
     function emergencyMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        flbToken.controlledMint(to, amount);
         emit EmergencyMint(amount);
     }
 
@@ -99,7 +91,6 @@ contract SustainabilityDAO is ERC721, AccessControl {
         uint256 credit = repairCredits[granny];
         if (credit == 0) revert MaintenancePoolEmpty();
 
-        flbToken.transfer(granny, credit);
         repairCredits[granny] = 0;
 
         emit RepairRequested(granny, credit);
@@ -129,4 +120,12 @@ contract SustainabilityDAO is ERC721, AccessControl {
 
         emit SymbolicSoulprint(soulId, essence, 5, msg.sender, block.timestamp);
     }
+
+    /// @dev See {IERC165-supportsInterface}.
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, AccessControl)
+        returns (bool)
+    { return super.supportsInterface(interfaceId); }
 }
