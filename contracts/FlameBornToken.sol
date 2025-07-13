@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 
 
 /**
@@ -11,7 +12,7 @@ import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IER
  * @notice Soulbound ERC20 token for identity-based, non-transferable incentives.
  * @dev Fully gas-optimized and protected with proper access control and validation.
  */
-contract FlameBornTokenV3 is ERC20, AccessControl {
+contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
     // === Custom Errors ===
     error ZeroAddress();
     error AlreadyRegistered();
@@ -22,11 +23,11 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
     error TransferNotAllowed();
 
     // === Role Identifiers ===
-    bytes32 private constant DAO_ROLE = keccak256("DAO_ROLE");
-    bytes32 private constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
-    bytes32 private constant YOUTH_ROLE = keccak256("YOUTH_ROLE");
+    bytes32 public constant DAO_ROLE = keccak256("DAO_ROLE");
+    bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+    bytes32 public constant YOUTH_ROLE = keccak256("YOUTH_ROLE");
 
-    // === Mappings with named keys (Solidity ≥0.8.18) ===
+    // === Mappings ===
     mapping(address user => bool) private _soulbound;
     mapping(address user => string) private _africanID;
 
@@ -45,7 +46,10 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
      * @notice Deploys FlameBornTokenV3 and mints initial supply to deployer.
      * @param initialSupply Initial supply (without decimals).
      */
-    constructor(uint256 initialSupply) payable ERC20("FlameBorn Token", "FLB") {
+    constructor(uint256 initialSupply)
+        ERC20("FlameBorn Token", "FLB")
+        EIP712("FlameBorn", "1.0.0")
+    {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(DAO_ROLE, msg.sender);
         _grantRole(VALIDATOR_ROLE, msg.sender);
@@ -58,27 +62,23 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
     }
 
     /**
-     * @dev Disable token transfers permanently (soulbound).
-     * Only minting (from == 0) and burning (to == 0) are allowed.
+     * @dev Disables transfers except minting and burning.
      */
     function _transfer(address from, address to, uint256 value) internal virtual override {
         if (from != address(0) && to != address(0)) {
             revert TransferNotAllowed();
         }
         super._transfer(from, to, value);
-
         if (from == address(0) && !_soulbound[to]) {
             _soulbound[to] = true;
         }
     }
-    
+
     /**
-     * @dev Hook that is called before any token creation or destruction.
+     * @dev Hook that ensures soulbound status after minting.
      */
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
         super._beforeTokenTransfer(from, to, amount);
-        
-        // Mark newly minted tokens as soulbound
         if (from == address(0) && !_soulbound[to]) {
             _soulbound[to] = true;
         }
@@ -98,15 +98,11 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
 
     /**
      * @notice Mint FLB tokens after verification by validator.
-     * @param to Recipient address.
-     * @param amount Number of tokens to mint.
-     * @param proof Off-chain verification string.
      */
-    function mintAfterValidation(
-        address to,
-        uint256 amount,
-        string calldata proof
-    ) external onlyRole(VALIDATOR_ROLE) {
+    function mintAfterValidation(address to, uint256 amount, string calldata proof)
+        external
+        onlyRole(VALIDATOR_ROLE)
+    {
         if (to == address(0)) revert ZeroAddress();
         if (!_isAfrican(to)) revert NotRegistered();
         if (amount == 0) revert ZeroAmount();
@@ -118,15 +114,11 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
 
     /**
      * @notice Mint tokens to reward youth participation.
-     * @param youth Target youth address.
-     * @param amount Number of tokens to mint.
-     * @param action Short action type string (max 32 bytes).
      */
-    function rewardYouthAction(
-        address youth,
-        uint256 amount,
-        string calldata action
-    ) external onlyRole(YOUTH_ROLE) {
+    function rewardYouthAction(address youth, uint256 amount, string calldata action)
+        external
+        onlyRole(YOUTH_ROLE)
+    {
         if (youth == address(0)) revert ZeroAddress();
         if (!_isAfrican(youth)) revert NotRegistered();
         if (amount == 0) revert ZeroAmount();
@@ -137,9 +129,7 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
     }
 
     /**
-     * @notice Burn tokens from an account.
-     * @param from Source address.
-     * @param amount Number of tokens to burn.
+     * @notice Burn tokens from a user.
      */
     function burn(address from, uint256 amount) external onlyRole(DAO_ROLE) {
         if (from == address(0)) revert ZeroAddress();
@@ -149,8 +139,6 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
 
     /**
      * @notice One-time minting for ecosystem bootstrapping.
-     * @param to Address to receive the tokens.
-     * @param amount Amount to mint.
      */
     function controlledMint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
         if (to == address(0)) revert ZeroAddress();
@@ -158,47 +146,40 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
 
         _mint(to, amount);
         initialMintComplete = true;
-
-        if (!_soulbound[to]) {
-            _soulbound[to] = true;
-        }
+        if (!_soulbound[to]) _soulbound[to] = true;
 
         emit ControlledMint(to, amount);
     }
 
     /**
-     * @notice Symbolic metadata-only minting, e.g. social proofs.
-     * @param user Recipient address.
-     * @param soulHash Hashed symbolic proof string.
-     * @param weight Optional numeric weight for indexing.
+     * @notice Issue symbolic metadata-only soulprint (non-token reward).
      */
     function issueSoulprint(address user, string calldata soulHash, uint256 weight)
-        external onlyRole(DAO_ROLE)
+        external
+        onlyRole(DAO_ROLE)
     {
         if (!_isAfrican(user)) revert NotRegistered();
         if (bytes(soulHash).length == 0) revert InvalidProof();
+
         emit SymbolicSoulprint(user, soulHash, weight, msg.sender);
     }
 
     /**
-     * @notice View African ID hash of an account.
-     * @param account Address to query.
-     * @return idHash Registered African ID hash.
+     * @notice Get registered African ID hash.
      */
     function getAfricanID(address account) external view returns (string memory idHash) {
         idHash = _africanID[account];
     }
 
     /**
-     * @notice Return number of decimals (18).
-     * @return Number of decimals (hardcoded to 18).
+     * @notice Returns number of decimals (18).
      */
     function decimals() public pure override returns (uint8) {
         return 18;
     }
 
     /**
-     * @dev Check if an address has registered an African ID.
+     * @dev Checks if a user has registered their African ID.
      */
     function _isAfrican(address user) internal view returns (bool) {
         return bytes(_africanID[user]).length != 0;
