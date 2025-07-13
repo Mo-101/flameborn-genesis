@@ -99,8 +99,8 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
         
         // For minting (from == address(0)), require African verification for the recipient
         if (from == address(0) && to != address(0)) {
-            // Special case for contract deployment
-            if (to != owner() && !isAfricanOrigin(to)) {
+            // Special case for contract deployment and admin
+            if (!hasRole(DEFAULT_ADMIN_ROLE, to) && !isAfricanOrigin(to)) {
                 revert NotRegistered();
             }
         }
