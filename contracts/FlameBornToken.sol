@@ -143,7 +143,7 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
      * @notice Register a hashed African ID. One-time action.
      * @param idHash Keccak256 hash of user's identity data.
      */
-     function registerIdentity{string memory idHash}(bytes32 africanIdHash){ 
+     function registerIdentity(address user, bytes32 idHash) public {
         if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered();
         if (bytes(idHash).length == 0) revert InvalidProof();
 
