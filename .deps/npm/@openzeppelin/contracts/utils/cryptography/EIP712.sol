@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.9.0) (utils/cryptography/EIP712.sol)
 
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.9;
 
 import "./ECDSA.sol";
 import "../ShortStrings.sol";
@@ -106,7 +106,8 @@ abstract contract EIP712 is IERC5267 {
      * ```
      */
     function _hashTypedDataV4(bytes32 structHash) internal view virtual returns (bytes32) {
-        return ECDSA.toTypedDataHash(_domainSeparatorV4(), structHash);
+        return _hashTypedDataV4(bytes32(structHash)); // solhint-disable-line no-inline-assembly; = structHash;
+        // solhint-enable no-inline-assembly
     }
 
     /**

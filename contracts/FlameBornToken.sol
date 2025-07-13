@@ -1,11 +1,13 @@
-// SPDX-License-Identifier: MIT
+// contracts/SoulboundSaleTokenV3.sol
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+import {ERC20}from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title FlameBornTokenV3
@@ -65,7 +67,7 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
      */
     constructor(uint256 initialSupply)
         ERC20("FlameBorn Token", "FLB")
-        EIP712("FlameBorn", "1.0.0")
+        EIP712("FlameBorn", "3.0.0")
     {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(DAO_ROLE, msg.sender);
@@ -116,18 +118,32 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
     /**
      * @dev Hook that ensures soulbound status after minting.
      */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
-        super._beforeTokenTransfer(from, to, amount);
-        if (from == address(0) && !_soulbound[to]) {
-            _soulbound[to] = true;
-        }
-    }
+     /**
+     * @dev Hook that ensures soulbound status after minting.
+     * Overrides ERC20’s internal hook.
+     */
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    )
+        internal
+        virtual
+        override { super._beforeTokenTransfer (from, to, amount);{
+        super._beforeTokenTransfer (from, to, amount);
 
+     if (from == address(0) && !_soulbound[to]) {
+             _soulbound[to] = true;
+         }
+     if (from == address(0) && !_soulbound[to]) {
+             _soulbound[to] = true;
+         }
+    }
     /**
      * @notice Register a hashed African ID. One-time action.
      * @param idHash Keccak256 hash of user's identity data.
      */
-    function registerAfricanID(string calldata idHash) external {
+     function registerIdentity{string memory idHash}(bytes32 africanIdHash){ 
         if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered();
         if (bytes(idHash).length == 0) revert InvalidProof();
 
