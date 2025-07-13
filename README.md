@@ -94,6 +94,70 @@ The **Flameborn DAO** gives voting rights to verified African FLB holders:
 
 ---
 
+## 🚀 Development & Deployment
+
+### Prerequisites
+- Node.js v16+ and npm
+- Git
+
+### Setup & Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Mo-101/flameborn-genesis.git
+cd flameborn-genesis
+
+# Install dependencies
+npm install
+```
+
+### Environment Configuration
+Create a `.env` file with the following variables:
+
+```
+PRIVATE_KEY=your_ethereum_private_key_here  # Must be 64 hex chars with optional 0x prefix
+CELO_ALFAJORES_RPC_URL=https://alfajores-forno.celo-testnet.org
+CELO_MAINNET_RPC_URL=https://forno.celo.org
+```
+
+### Compile Contracts
+```bash
+npx hardhat compile
+```
+
+### Deploy to Celo Networks
+
+**Alfajores Testnet:**
+```bash
+npx hardhat run scripts/deploy.js --network alfajores
+```
+
+**Celo Mainnet:**
+```bash
+npx hardhat run scripts/deploy.js --network celo
+```
+
+### Verify Contract on CeloScan
+
+```bash
+npx hardhat run scripts/verify.js --network alfajores  # or --network celo
+```
+
+## 📱 Frontend Development
+
+After mainnet deployment, parallel frontend development will begin for:
+- Landing page with validator map
+- USSD interfaces for feature phones
+- Mobile-first African user experience
+
+## 📋 Validator Documentation
+
+Validator kits and ground operations are documented in `firelog.md` including:
+- Deployment photos
+- Clinic integration
+- Community feedback
+- Sovereignty metrics
+
 ## 🪙 Minting Process
 
 1. Donor selects verified health actor

@@ -1,0 +1,11 @@
+
+=============================================
+DEPLOYMENT STARTED at 2025-07-13T11:59:47.784Z
+Network: alfajores
+Logs saved to: C:\Users\AI\Documents\GitHub\flameborn-genesis\logs\deployment-2025-07-13T11-59-47.770Z.log
+=============================================
+
+[1/5] Setting up provider for alfajores...
+   > Deployer address: 0x1Be31A94361a391bBaFB2a4CCd704F57dc04d4bb
+[2/5] Checking account balance...
+   > Balance: 0.000063 CELO
