@@ -59,12 +59,24 @@ contract FlameBornTokenV3 is ERC20, AccessControl {
      * @dev Disable token transfers permanently (soulbound).
      * Only minting (from == 0) and burning (to == 0) are allowed.
      */
-    function _update(address from, address to, uint256 value) internal override {
+    function _transfer(address from, address to, uint256 value) internal virtual override {
         if (from != address(0) && to != address(0)) {
             revert TransferNotAllowed();
         }
-        super._update(from, to, value);
+        super._transfer(from, to, value);
 
+        if (from == address(0) && !_soulbound[to]) {
+            _soulbound[to] = true;
+        }
+    }
+    
+    /**
+     * @dev Hook that is called before any token creation or destruction.
+     */
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
+        super._beforeTokenTransfer(from, to, amount);
+        
+        // Mark newly minted tokens as soulbound
         if (from == address(0) && !_soulbound[to]) {
             _soulbound[to] = true;
         }
