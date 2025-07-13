@@ -2,14 +2,14 @@
 
 # 🌍 Flameborn Token (FLB)
 
-**"Life is Simple. Only Decide."** — Flameborn’s guiding motto  
-A decentralized humanitarian initiative to eliminate disease outbreaks in Africa through trustless, transparent, and direct funding.
+**"Life is Simple. Only Decide."** — Flameborn's guiding motto  
+A decentralized humanitarian initiative to eliminate disease outbreaks in Africa through trustless, transparent, and direct funding with African sovereignty at its core.
 
 ---
 
 ## 🔥 Overview
 
-**Flameborn** is a blockchain-based system that delivers fast, traceable, and community-driven financial support to real health actors in crisis zones. Powered by the **FLB token (BEP-20)** on Binance Smart Chain, the platform automates funding and accountability using smart contracts and decentralized governance.
+**Flameborn** is a blockchain-based system that delivers fast, traceable, and community-driven financial support to real health actors in crisis zones. Powered by the **FLB token** on the **Celo blockchain**, the platform automates funding and accountability using smart contracts and decentralized governance while enforcing African identity verification.
 
 - Direct donor-to-HealthActor (Hospital or Mobile Clinic) funding with no intermediaries
 - Smart-contract-verified health actor registry
@@ -23,43 +23,54 @@ A decentralized humanitarian initiative to eliminate disease outbreaks in Africa
 |----------------|---------------------------|
 | Token Name     | Flameborn Token           |
 | Symbol         | FLB                       |
-| Standard       | BEP-20 (BNB Smart Chain)  |
+| Standard       | ERC-20 (Celo Blockchain)  |
 | Decimals       | 18                        |
 | Governance     | DAO voting (1 FLB = 1 vote) |
-| Initial Supply | 100 FLB (Genesis drop)    |
-| Mint Logic     | 1 FLB / 1 BNB donated     |
+| Initial Supply | 1,000,000 FLB (Genesis)   |
+| Key Feature    | Soulbound to verified African identities |
 
 ---
 
 ## ⚙️ Smart Contracts
 
-### `FlameBornToken.sol`
-- ERC20 + Burnable + AccessControl
-- `MINTER_ROLE` required to mint
-- Used by `DonationRouter` to mint FLB on verified donations
+### `FlameBornTokenV3.sol`
+- ERC20 + Burnable + AccessControl + EIP712 for signatures
+- Soulbound token (non-transferable) tied to African identity
+- Multiple verification methods for African origin proof
+- Role-based access control system with DAO, VALIDATOR, YOUTH, ELDER, and TRIBAL_COUNCIL roles
 
-### `HealthActorRegistry.sol`
-- Registers verified health actors (doctors, clinics, CHWs)
-- Only those listed can receive donations
-
-### `DonationRouter.sol`
-- Accepts BNB from donors
-- Verifies health actor
-- Transfers BNB to recipient
-- Mints equivalent FLB to donor
-- Uses `nonReentrant` for safety
+### African Identity Verification Features
+- Tribal council approval system for identity verification
+- Biometric verification workflow with signature validation
+- Ancestry proof verification by elders
+- On-chain verification tracking
 
 ---
 
-## 🏛 DAO Governance
+## 🔥 Validator Onboarding Process
 
-The **Flameborn DAO** gives voting rights to all FLB holders:
+1. Initial validators established in key African clinics:
+   - Garissa (Kenya)
+   - Kisumu (Kenya)
+   - Khayelitsha (South Africa)
+2. Validators verify African identity through multiple methods
+3. Verified individuals receive soulbound FLB tokens
+4. Validator network expands through recognized community leaders
 
-- Approve health actors and campaigns
-- Change system parameters (minting rate, etc.)
-- Propose and vote on upgrades or partnerships
+All verification processes enforce African sovereignty principles.
 
-> Governance = ownership = accountability.
+---
+
+## 🏛 African Sovereignty Governance
+
+The **Flameborn DAO** gives voting rights to verified African FLB holders:
+
+- Tribal Council manages critical identity verification
+- Elders validate ancestry and cultural proof
+- Validators confirm biometric identity
+- Youth participants engage in community initiatives
+
+> African governance = African ownership = African sovereignty.
 
 ---
 
@@ -75,11 +86,11 @@ The **Flameborn DAO** gives voting rights to all FLB holders:
 
 ## 🛡 Security Architecture
 
-- Verified-only actors via `HealthActorRegistry`
-- Reentrancy protection via `nonReentrant`
+- African identity verification required for token receipt
+- Multi-layered verification using Tribal Council, Biometric, and Ancestry proof
+- EIP712 signatures for secure verification processes
 - OpenZeppelin libraries for battle-tested security
-- Non-custodial design: No pooled funds, direct transfers
-- DAO can pause operations or update contracts through governance
+- Role-based access control for sovereign governance
 
 ---
 
