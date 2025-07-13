@@ -3,6 +3,8 @@ pragma solidity =0.8.24;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {IERC20Metadata, IERC20Metadata} from "@openzeppelin/contracts/contracts/data/IERC20Metadata.sol";
+
 
 /**
  * @title FlameBornTokenV3
