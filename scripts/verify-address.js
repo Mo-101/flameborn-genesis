@@ -40,8 +40,8 @@ async function main() {
     const code = await web3.eth.getCode(addressToVerify);
     const isContract = code !== '0x';
     
-    console.log('
-✅ Address verification results:');
+    console.log('\n');
+    console.log('✅ Address verification completed');
     console.log('-----------------------------');
     console.log(`Valid address: Yes`);
     console.log(`Balance: ${balanceInCELO} CELO`);

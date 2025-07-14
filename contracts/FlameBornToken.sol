@@ -1,6 +1,7 @@
-// SPDX-License-Identifier: MIT
+// contracts/SoulboundSaleTokenV3.sol
 pragma solidity ^0.8.24;
 
+import {ERC20}from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
@@ -117,18 +118,32 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
     /**
      * @dev Hook that ensures soulbound status after minting.
      */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
-        super._beforeTokenTransfer(from, to, amount);
-        if (from == address(0) && !_soulbound[to]) {
-            _soulbound[to] = true;
-        }
-    }
+     /**
+     * @dev Hook that ensures soulbound status after minting.
+     * Overrides ERC20’s internal hook.
+     */
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    )
+        internal
+        virtual
+        override { super._beforeTokenTransfer (from, to, amount);{
+        super._beforeTokenTransfer (from, to, amount);
 
+     if (from == address(0) && !_soulbound[to]) {
+             _soulbound[to] = true;
+         }
+     if (from == address(0) && !_soulbound[to]) {
+             _soulbound[to] = true;
+         }
+    }
     /**
      * @notice Register a hashed African ID. One-time action.
      * @param idHash Keccak256 hash of user's identity data.
      */
-    function registerAfricanID(string calldata idHash) external {
+     function registerIdentity(address user, bytes32 idHash) public {
         if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered();
         if (bytes(idHash).length == 0) revert InvalidProof();
 
