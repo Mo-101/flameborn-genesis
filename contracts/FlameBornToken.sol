@@ -1,5 +1,4 @@
-// contracts/FlameBornTokenV3.sol
-// SPDX-License-Identifier: MIT
+// contracts/SoulboundSaleTokenV3.sol
 pragma solidity ^0.8.24;
 
 import {ERC20}from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
