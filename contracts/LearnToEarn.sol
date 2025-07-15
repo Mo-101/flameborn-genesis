@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 
 abstract contract IStakeholderRegistry {
-    function stakeholders(address token) external view returns (uint256 count);
+    function stakeholders(address token) external view virtual returns (uint256 count);
 }
 /**
  * @title LearnToEarn

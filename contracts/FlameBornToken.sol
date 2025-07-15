@@ -2,7 +2,6 @@
 pragma solidity ^0.8.24;
 
 import {ERC20}from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -94,25 +93,22 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
      * Also enforces African origin verification for recipients.
      */
     function _transfer(address from, address to, uint256 value) internal virtual override {
-        // Regular soulbound check - no transfers between users
-        if (from != address(0) && to != address(0)) {
+        // Allow minting and burning as before
+        if (from == address(0) || to == address(0)) {
+            super._transfer(from, to, value);
+            // Mark as soulbound when minting
+            if (from == address(0) && !_soulbound[to]) {
+                _soulbound[to] = true;
+            }
+            return;
+        }
+
+        // Allow transfer only if recipient is a soulbound flameborn user
+        if (!_soulbound[to] || !_isAfrican(to)) {
             revert TransferNotAllowed();
         }
-        
-        // For minting (from == address(0)), require African verification for the recipient
-        if (from == address(0) && to != address(0)) {
-            // Special case for contract deployment and admin
-            if (!hasRole(DEFAULT_ADMIN_ROLE, to) && !isAfricanOrigin(to)) {
-                revert NotRegistered();
-            }
-        }
-        
+
         super._transfer(from, to, value);
-        
-        // Mark as soulbound when minting
-        if (from == address(0) && !_soulbound[to]) {
-            _soulbound[to] = true;
-        }
     }
 
     /**
@@ -129,26 +125,26 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
     )
         internal
         virtual
-        override { super._beforeTokenTransfer (from, to, amount);{
-        super._beforeTokenTransfer (from, to, amount);
+        override
+    {
+        super._beforeTokenTransfer(from, to, amount);
 
-     if (from == address(0) && !_soulbound[to]) {
-             _soulbound[to] = true;
-         }
-     if (from == address(0) && !_soulbound[to]) {
-             _soulbound[to] = true;
-         }
+        if (from == address(0) && !_soulbound[to]) {
+            _soulbound[to] = true;
+        }
     }
+
     /**
      * @notice Register a hashed African ID. One-time action.
      * @param idHash Keccak256 hash of user's identity data.
+     * @dev This function is for a user to register their own identity hash. It does not grant verified status.
      */
-     function registerIdentity(address user, bytes32 idHash) public {
-        if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered();
-        if (bytes(idHash).length == 0) revert InvalidProof();
+    function registerIdentity(bytes32 idHash) public {
+        if (bytes(_africanID[msg.sender]).length != 0) revert AlreadyRegistered(); // Checks the caller, not a 'user' parameter
+        if (idHash == bytes32(0)) revert InvalidProof();
 
-        _africanID[msg.sender] = idHash;
-        emit AfricanIDRegistered(msg.sender, idHash);
+        _africanID[msg.sender] = Strings.toHexString(uint256(idHash));
+        emit AfricanIDRegistered(msg.sender, Strings.toHexString(uint256(idHash)));
     }
 
     /**
