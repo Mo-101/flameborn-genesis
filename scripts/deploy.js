@@ -2,6 +2,7 @@ const hre = require("hardhat");
 const fs = require("fs");
 
 async function main() {
+  console.log("🔥 Starting deployment script for FlameBornTokenV3...");
   console.log(`
 [1/5] Starting deployment to ${hre.network.name}...`);
 
@@ -17,18 +18,23 @@ async function main() {
   const flameBornToken = await FlameBornToken.deploy(initialSupply);
   console.log("   > Transaction sent, waiting for deployment...");
 
-  await flameBornToken.waitForDeployment();
-  const tokenAddress = await flameBornToken.getAddress();
-  console.log("[5/5] Contract deployed successfully.");
+  try {
+    await flameBornToken.waitForDeployment();
+    console.log(`[5/5] Deployment successful! Contract address: ${flameBornToken.address}`);
+    console.log(`To verify, run: npx hardhat verify --network ${hre.network.name} ${flameBornToken.address} ${initialSupply} --contract contracts/FlameBornTokenV3.sol:FlameBornTokenV3`);
+  } catch (error) {
+    console.error("\n❌ Deployment failed:", error);
+    process.exit(1);
+  }
 
-  console.log(`\n🔥 FlameBornToken deployed to ${tokenAddress} on ${hre.network.name}\n`);
+  console.log(`\n🔥 FlameBornToken deployed to ${flameBornToken.address} on ${hre.network.name}\n`);
 
-  console.log(`\n📋 Contract verification command:\nnpx hardhat verify --network ${hre.network.name} ${tokenAddress} ${initialSupply}\n`);
+  console.log(`\n📋 Contract verification command:\nnpx hardhat verify --network ${hre.network.name} ${flameBornToken.address} ${initialSupply}\n`);
 
   // Save the contract address for other scripts
   const deploymentInfo = {
     network: hre.network.name,
-    contractAddress: tokenAddress,
+    contractAddress: flameBornToken.address,
     deployerAddress: deployer.address
   };
   fs.writeFileSync(`deployment-info-${hre.network.name}.json`, JSON.stringify(deploymentInfo, null, 2));

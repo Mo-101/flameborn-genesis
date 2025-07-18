@@ -2162,8 +2162,8 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
      * @param initialSupply Initial supply (without decimals).
      */
     constructor(uint256 initialSupply)
-        ERC20("FlameBorn Token", "FLB")
-        EIP712("FlameBorn", "3.0.0")
+        ERC20("Flameborn", "FLB")
+        EIP712("Flameborn", "3.0.0")
     {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(DAO_ROLE, msg.sender);
