@@ -1,14 +1,9 @@
-const hre = require("hardhat");
-
 async function main() {
+  const hre = require("hardhat");
   const [deployer] = await hre.ethers.getSigners();
   const balance = await hre.ethers.provider.getBalance(deployer.address);
 
-  console.log(`
-Network: ${hre.network.name}
-Deployer Address: ${deployer.address}
-Balance: ${hre.ethers.formatEther(balance)} CELO
-  `);
+  console.log(`\nNetwork: ${hre.network.name}\nDeployer Address: ${deployer.address}\nBalance: ${hre.ethers.formatEther(balance)} CELO\n`);
 }
 
 main()
