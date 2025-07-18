@@ -1,9 +1,10 @@
 require("dotenv").config();
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
+require("@nomicfoundation/hardhat-verify");
+require("@celo-tools/hardhat-celo");
 
 /** @type import('hardhat/config').HardhatUserConfig */
-require('@nomicfoundation/hardhat-verify');
-
-
 module.exports = {
   solidity: {
     version: "0.8.24",
@@ -13,6 +14,16 @@ module.exports = {
     }
   },
   networks: {
+    bsc: {
+      url: process.env.BSC_MAINNET_RPC_URL || 'https://bsc-dataseed.binance.org/',
+      chainId: 56,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    bscTestnet: {
+      url: process.env.BSC_TESTNET_RPC_URL || 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+      chainId: 97,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
     alfajores: {
       url: process.env.CELO_ALFAJORES_RPC_URL || 'https://alfajores-forno.celo-testnet.org',
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
@@ -24,10 +35,28 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      alfajores: process.env.ETHERSCAN_API_KEY,
-      celo: process.env.ETHERSCAN_API_KEY
+      bsc: process.env.BSCSCAN_API_KEY || "",
+      bscTestnet: process.env.BSCSCAN_API_KEY || "",
+      alfajores: process.env.ETHERSCAN_API_KEY || "",
+      celo: process.env.ETHERSCAN_API_KEY || ""
     },
     customChains: [
+      {
+        network: "bsc",
+        chainId: 56,
+        urls: {
+          apiURL: "https://api.bscscan.com/api",
+          browserURL: "https://bscscan.com"
+        }
+      },
+      {
+        network: "bscTestnet",
+        chainId: 97,
+        urls: {
+          apiURL: "https://api-testnet.bscscan.com/api",
+          browserURL: "https://testnet.bscscan.com"
+        }
+      },
       {
         network: 'alfajores',
         chainId: 44787,
@@ -43,15 +72,10 @@ module.exports = {
           apiURL: 'https://explorer.celo.org/api',
           browserURL: 'https://explorer.celo.org'
         }
-      }, // Added comma here
+      }
     ]
   }
 };
-
-// The following section seems to be a malformed object or an attempt to extend the module.exports.
-// It's causing a syntax error. I'm commenting it out as it's not valid JavaScript syntax in this context.
-// If these were intended to be separate configurations or part of a larger structure, they need to be
-// properly integrated into the `module.exports` object.
 
 // {
 //   {
