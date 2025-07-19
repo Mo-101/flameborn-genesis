@@ -1,8 +1,6 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-etherscan");
 require("@nomicfoundation/hardhat-verify");
-require("@celo-tools/hardhat-celo");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
