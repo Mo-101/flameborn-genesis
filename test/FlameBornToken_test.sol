@@ -3,8 +3,8 @@
 pragma solidity ^0.8.24;
 
 // This import is automatically injected by Remix
-import "remix_tests.sol";
-import "remix_accounts.sol";
+import { Assert } from "@remix-project/remix-tests/remix_tests.sol";
+import { TestsAccounts } from "remix_accounts.sol";
 import "@openzeppelin/contracts/token/ERC20/FlameBornToken.sol";
 import "@openzeppelin/contracts/token/ERC20/FlameBornTokenSale.sol";
 import {FlameBornToken as TokenContract}from "@openzeppelin/contracts/token/ERC20/FlameBornToken.sol";
