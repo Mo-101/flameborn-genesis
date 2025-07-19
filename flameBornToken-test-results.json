@@ -1,0 +1,106 @@
+{
+  "timestamp": "2025-07-17T23:04:10.308Z",
+  "contract": "0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60",
+  "network": "Celo Alfajores",
+  "results": {
+    "successfulTests": 7,
+    "failedTests": 12,
+    "details": [
+      {
+        "testName": "Get Token Info",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Generate Test Wallets",
+        "success": true,
+        "details": "Created 30 wallets"
+      },
+      {
+        "testName": "Grant DAO Role",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Grant Validator Role",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Grant Tribal Council Role",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Grant Elder Role",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Grant Youth Role",
+        "success": true,
+        "details": "No additional details"
+      },
+      {
+        "testName": "Register African ID for Wallet 6",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0x1a858d5f000000000000000000000000fb575831757b598c046721f819412e182d27b3dc0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000d4146522d49442d32373139323400000000000000000000000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Register African ID for Wallet 7",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0x1a858d5f00000000000000000000000013d2f3fa5386183a81c1dc75413ccc33881108fb0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000c4146522d49442d33323532340000000000000000000000000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Register African ID for Wallet 8",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0x1a858d5f000000000000000000000000543baf96b6c7d3e778a3ccd428f13fa64c5a1be40000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000d4146522d49442d35383936393000000000000000000000000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Register African ID for Wallet 9",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0x1a858d5f000000000000000000000000d20b548c8ed0d08f960a37c127d689b329b4e5c60000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000d4146522d49442d39333739393300000000000000000000000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Register African ID for Wallet 10",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0x1a858d5f000000000000000000000000f642ba2f433bbdecf39228597309a3028c4020ec0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000d4146522d49442d37333336373100000000000000000000000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Tribal Council Verification",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0xcf2440f60000000000000000000000005ff0a60b3d2554d97bb3b48ae44b7fbe2fb1605d\", \"from\": \"0xdDbEa0c77Ee750d1dD72a36CA01b138491bac820\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Biometric Verification",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0xd51b4af9ae35f268a7b7f0e1eb0d61b95e2acec7ce5a0be4ff301177d90cbf38d2da5da2\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Ancestry Proof Verification",
+        "success": false,
+        "details": "missing revert data (action=\"estimateGas\", data=null, reason=null, transaction={ \"data\": \"0xd87e63ec000000000000000000000000f27fd905bcce5ce80c2b2b1978d1361eb56c8e7f5bcb5993f10f0c4e831b3e42e014b4c52eaba36254c932acc83ab23e387d0003\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Mint After Validation",
+        "success": false,
+        "details": "execution reverted (unknown custom error) (action=\"estimateGas\", data=\"0xaba47339\", reason=null, transaction={ \"data\": \"0xfb954c6b0000000000000000000000005b192a6caa522e7dc89b71164ba5378472c4642c0000000000000000000000000000000000000000000000056bc75e2d631000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001e56616c69646174696f6e5f50726f6f665f313735323739333434373439380000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Youth Action Reward",
+        "success": false,
+        "details": "execution reverted: \"AccessControl: account 0x239082b3dbd219ea4fdd689428ddbf67fcc0eaac is missing role 0x1b9fc5dfa37691c001ae7a609db065008a858cf56ead465f966a048af385e2e6\" (action=\"estimateGas\", data=\"0x08c379a000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000094416363657373436f6e74726f6c3a206163636f756e7420307832333930383262336462643231396561346664643638393432386464626636376663633065616163206973206d697373696e6720726f6c6520307831623966633564666133373639316330303161653761363039646230363530303861383538636635366561643436356639363661303438616633383565326536000000000000000000000000\", reason=\"AccessControl: account 0x239082b3dbd219ea4fdd689428ddbf67fcc0eaac is missing role 0x1b9fc5dfa37691c001ae7a609db065008a858cf56ead465f966a048af385e2e6\", transaction={ \"data\": \"0xae7f644d0000000000000000000000006e3abf276f081314412ad946e250f30db9845b68000000000000000000000000000000000000000000000002b5e3af16b18800000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001f436f6d6d756e69747920736572766963652070617274696369706174696f6e00\", \"from\": \"0x239082B3DBd219ea4fDD689428ddbF67FcC0EaAc\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert={ \"args\": [ \"AccessControl: account 0x239082b3dbd219ea4fdd689428ddbf67fcc0eaac is missing role 0x1b9fc5dfa37691c001ae7a609db065008a858cf56ead465f966a048af385e2e6\" ], \"name\": \"Error\", \"signature\": \"Error(string)\" }, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Transfer Test Setup",
+        "success": false,
+        "details": "execution reverted (unknown custom error) (action=\"estimateGas\", data=\"0xaba47339\", reason=null, transaction={ \"data\": \"0xfb954c6b00000000000000000000000015151519508ab0c9eb88660e771b4cc8e235b3390000000000000000000000000000000000000000000000056bc75e2d631000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001b5472616e736665725f546573745f313735323739333434383935390000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      },
+      {
+        "testName": "Token Burning",
+        "success": false,
+        "details": "execution reverted (unknown custom error) (action=\"estimateGas\", data=\"0xaba47339\", reason=null, transaction={ \"data\": \"0xfb954c6b00000000000000000000000008ea5b16328faf61a6bdec34b43d358112db55540000000000000000000000000000000000000000000000056bc75e2d63100000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000174275726e5f546573745f31373532373933343439363436000000000000000000\", \"from\": \"0xA7e8E516d0F2e5f74aA2f62773297978FdbFF705\", \"to\": \"0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
+      }
+    ]
+  }
+}
