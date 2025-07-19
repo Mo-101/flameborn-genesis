@@ -2,6 +2,7 @@
 	"domain": {
 		"chainId": 1,
 		"name": "Flameborn Token",
+		"symbol":"FLB",
 		"verifyingContract": "0x7d60bA97eF6293Cd0d8Fc68d4191E331Bd0e1F1d",
 		"version": "1"
 	},
