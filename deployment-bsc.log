@@ -1,0 +1,15 @@
+Compiled 40 Solidity files successfully (evm target: paris).
+≡ƒöÑ Starting deployment script for FlameBornTokenV3...
+
+[1/5] Starting deployment to bsc...
+[2/5] Getting deployer account...
+   > Deployer address: 0x7d60bA97eF6293Cd0d8Fc68d4191E331Bd0e1F1d
+[3/5] Getting contract factory for FlameBornTokenV3...
+
+Γ¥î Deployment failed: HardhatError: HH700: Artifact for contract "contracts/FlameBornTokenBSC.sol:FlameBornTokenV3BSC" not found. Did you mean "contracts/FlameBornTokenBSC.sol:FlameBornTokenV3"?
+    at Artifacts._handleWrongArtifactForFullyQualifiedName (C:\Users\AI\Documents\GitHub\flameborn-genesis\node_modules\hardhat\src\internal\artifacts.ts:697:11)
+    at Artifacts._getValidArtifactPathFromFullyQualifiedName (C:\Users\AI\Documents\GitHub\flameborn-genesis\node_modules\hardhat\src\internal\artifacts.ts:646:21)
+    at Artifacts._getArtifactPath (C:\Users\AI\Documents\GitHub\flameborn-genesis\node_modules\hardhat\src\internal\artifacts.ts:513:16)
+    at Artifacts.readArtifact (C:\Users\AI\Documents\GitHub\flameborn-genesis\node_modules\hardhat\src\internal\artifacts.ts:71:26)
+    at getContractFactory (C:\Users\AI\Documents\GitHub\flameborn-genesis\node_modules\@nomiclabs\hardhat-ethers\src\internal\helpers.ts:99:22)
+    at main (C:\Users\AI\Documents\GitHub\flameborn-genesis\scripts\deploy.js:16:24)
