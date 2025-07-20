@@ -6,11 +6,11 @@ describe("FlameBornToken", function () {
   let owner, validator, user1, user2, tribalCouncil, youthLeader;
   
   // Role hashes
-  const DAO_ROLE = ethers.keccak256(ethers.toUtf8Bytes("DAO_ROLE"));
-  const VALIDATOR_ROLE = ethers.keccak256(ethers.toUtf8Bytes("VALIDATOR_ROLE"));
-  const YOUTH_ROLE = ethers.keccak256(ethers.toUtf8Bytes("YOUTH_ROLE"));
-  const ELDER_ROLE = ethers.keccak256(ethers.toUtf8Bytes("ELDER_ROLE"));
-  const TRIBAL_COUNCIL_ROLE = ethers.keccak256(ethers.toUtf8Bytes("TRIBAL_COUNCIL_ROLE"));
+  const DAO_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("DAO_ROLE"));
+  const VALIDATOR_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("VALIDATOR_ROLE"));
+  const YOUTH_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("YOUTH_ROLE"));
+  const ELDER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ELDER_ROLE"));
+  const TRIBAL_COUNCIL_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TRIBAL_COUNCIL_ROLE"));
   const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
   before(async function () {
@@ -18,7 +18,7 @@ describe("FlameBornToken", function () {
     [owner, validator, user1, user2, tribalCouncil, youthLeader] = await ethers.getSigners();
     
     // Deploy the token contract
-    const Token = await ethers.getContractFactory("FlameBornToken");
+    const Token = await ethers.getContractFactory("FlameBornTokenV3BSC");
     token = await Token.deploy(ethers.parseEther("1000")); // Initial supply of 1000 tokens
     
     // Grant roles for testing
@@ -59,6 +59,25 @@ describe("FlameBornToken", function () {
   });
 
   describe("Token Operations", function () {
+    it("should allow burning tokens", async function () {
+      const burnAmount = ethers.parseEther("10");
+      // Burn from user1 (after minting)
+      await token.connect(validator).mintAfterValidation(user1.address, burnAmount, "proofBurn");
+      const balanceBefore = await token.balanceOf(user1.address);
+      await token.connect(user1).burn(burnAmount);
+      const balanceAfter = await token.balanceOf(user1.address);
+      expect(balanceAfter).to.equal(balanceBefore - burnAmount);
+    });
+
+    it("should emit events on mint and burn", async function () {
+      const mintAmount = ethers.parseEther("5");
+      await expect(token.connect(validator).mintAfterValidation(user1.address, mintAmount, "proofEvent"))
+        .to.emit(token, "MintedAfterValidation")
+        .withArgs(user1.address, mintAmount, "proofEvent");
+      await expect(token.connect(user1).burn(mintAmount))
+        .to.emit(token, "FLBBurned");
+    });
+
     const mintAmount = ethers.parseEther("100");
     
     before(async function () {

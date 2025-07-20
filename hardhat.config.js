@@ -1,8 +1,6 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-etherscan");
 require("@nomicfoundation/hardhat-verify");
-require("@celo-tools/hardhat-celo");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -15,7 +13,7 @@ module.exports = {
   },
   networks: {
     bsc: {
-      url: process.env.BSC_MAINNET_RPC_URL || 'https://bsc-dataseed.binance.org/',
+      url: process.env.BSC_MAINNET_RPC_URL || 'https://bsc-dataseed1.binance.org/',
       chainId: 56,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },

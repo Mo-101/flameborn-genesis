@@ -11,7 +11,9 @@ async function main() {
   console.log(`   > Deployer address: ${deployer.address}`);
 
   console.log("[3/5] Getting contract factory for FlameBornTokenV3...");
-  const FlameBornToken = await hre.ethers.getContractFactory("FlameBornTokenV3");
+  // Specify fully qualified contract name to resolve multiple artifacts error
+// Use BSC-specific contract
+const FlameBornToken = await hre.ethers.getContractFactory("contracts/FlameBornTokenBSC.sol:FlameBornTokenV3BSC");
 
   const initialSupply = 1000000;
   console.log(`[4/5] Deploying contract with initial supply of ${initialSupply} tokens...`);
@@ -19,7 +21,7 @@ async function main() {
   console.log("   > Transaction sent, waiting for deployment...");
 
   try {
-    await flameBornToken.waitForDeployment();
+    await flameBornToken.deployed();
     console.log(`[5/5] Deployment successful! Contract address: ${flameBornToken.address}`);
     console.log(`To verify, run: npx hardhat verify --network ${hre.network.name} ${flameBornToken.address} ${initialSupply} --contract contracts/FlameBornTokenV3.sol:FlameBornTokenV3`);
   } catch (error) {
