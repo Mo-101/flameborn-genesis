@@ -4,7 +4,7 @@ async function main() {
   const contractAddress = "0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60";
   const [deployer] = await hre.ethers.getSigners();
   console.log("Using account:", deployer.address);
-  const FLB = await ethers.getContractAt("contracts/FlameBornToken.sol:FlameBornToken", contractAddress, deployer);
+  const FLB = await ethers.getContractAt("FlameBornToken", contractAddress, deployer);
 
   // Check deployer FLB token balance
   const flbBalance = await FLB.balanceOf(deployer.address);
