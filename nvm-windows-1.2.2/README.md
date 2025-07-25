@@ -1,55 +1,3 @@
-<div align="center"><h2>Notice: We are working full time work on <a href="https://github.com/coreybutler/nvm-windows/wiki/Runtime">Runtime</a>, the successor to NVM for Windows.</h2>Complete <a href="https://t.co/oGqQCM9FPx">this form</a> to provide your thoughts and sign up for progress updates.<br/><br/>Updates will also be posted on the <A href="https://linkedin.com/company/authorsoftware">Author Software LinkedIn Page</a>.</div>
-<br/><br/>
-<h1 align="center">NVM for Windows</h1>
-
-<div align="center">
-  The <a href="https://docs.microsoft.com/en-us/windows/nodejs/setup-on-windows">Microsoft</a>/<a href="https://docs.npmjs.com/cli/v9/configuring-npm/install#windows-node-version-managers">npm</a>/<a href="https://cloud.google.com/nodejs/docs/setup#installing_nvm">Google</a> recommended Node.js version manager for <em>Windows</em>.<br/>
-
-<details>
-<summary><b>This is not the same thing as nvm!</b> (expand for details)</summary>
-
-_The original [nvm](https://github.com/nvm-sh/nvm) is a completely separate project for Mac/Linux only._ This project uses an entirely different philosophy and is not just a clone of nvm. Details are listed in [Why another version manager?](#bulb-why-another-version-manager) and [what&#39;s the big difference?](#bulb-whats-the-big-difference).
-</details>
-
-[![Download Now](https://img.shields.io/badge/-Download%20Now!-%2322A6F2)](https://github.com/coreybutler/nvm-windows/releases) [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/coreybutler/nvm-windows?label=Latest%20Release&style=social&x=1)]((https://github.com/coreybutler/nvm-windows/releases)) ![GitHub Release Date](https://img.shields.io/github/release-date/coreybutler/nvm-windows?label=Released&style=social) ![GitHub all releases](https://img.shields.io/github/downloads/coreybutler/nvm-windows/total?label=Downloads&style=social) [![Discuss](https://img.shields.io/badge/-Discuss-blue)](https://github.com/coreybutler/nvm-windows/discussions) [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fintent%2Ftweet%3Fhashtags%3Dnodejs%26original_referer%3Dhttp%253A%252F%252F127.0.0.1%253A91%252F%26text%3DCheck%2520out%2520NVM%2520for%2520Windows%21%26tw_p%3Dtweetbutton%26url%3Dhttp%253A%252F%252Fgithub.com%252Fcoreybutler%252Fnvm-windows%26via%3Dgoldglovecb)](https://twitter.com/intent/tweet?hashtags=nodejs&original_referer=http%3A%2F%2F127.0.0.1%3A91%2F&text=Check%20out%20NVM%20for%20Windows!&tw_p=tweetbutton&url=http%3A%2F%2Fgithub.com%2Fcoreybutler%2Fnvm-windows&via=goldglovecb)
-</div>
-
-<h5 align="center">Sponsors</h5>
-
-<div align="center">
-  <table cellpadding="5" cellspacing="0" border="0" align="center">
-    <tr>
-      <td><a href="https://linkedin.com/company/authorsoftware"><img src="https://github.com/coreybutler/staticassets/blob/master/sponsors/logo_author_software_flat.png" width="200px"/></a></td>
-      <td width="33%" align="center"><a href="https://ecorventures.com"><img src="https://avatars.githubusercontent.com/u/8259581?s=200&v=4" height="30px"/></a></td>
-      <td width="33%" align="center"><a href="https://github.com/microsoft"><img src="https://user-images.githubusercontent.com/770982/195955265-5c3dca78-7140-4ec6-b05a-f308518643ee.png" height="30px"/></a></td>
-    </tr>
-    <tr>
-      <td colspan="4" align="center">
-        <a href="https://github.com/sponsors/coreybutler"><img src="https://img.shields.io/github/sponsors/coreybutler?label=Individual%20Sponsors&logo=github&style=social"/></a>
-        &nbsp;<a href="https://github.com/sponsors/coreybutler"><img src="https://img.shields.io/badge/-Become%20a%20Sponsor-yellow"/></a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="4" align="center">
-        <img src="https://github.blog/wp-content/uploads/2020/09/github-stars-logo_Color.png" width="50"/><br/>
-        <b>Can't sponsor?</b><br/>Consider <a href="https://stars.github.com/nominate/" target="_blank">nominating @coreybutler for a Github star</a>.
-      </td>
-    </tr>
-  </table>
-</div>
-<br/>
-
-<div align="center"><b>Running into issues?</b> See the <a href="https://github.com/coreybutler/nvm-windows/wiki/Common-Issues">common issues wiki</a>.</div>
-
-<br/>
-<table style="background-color:red;padding:6px;border-radius:3px;">
-  <tr><td>
-    <h3>Seeking Feedback:</h3>
-    We're working on <a href="https://github.com/coreybutler/nvm-windows/wiki/Runtime">Runtime (rt)</a>, the successor to NVM For Windows. Please contribute by taking a minute to complete <a href="https://t.co/oGqQCM9FPx">this form</a>. Thank you!
-    <h3></h3>
-  </td></tr>
-</table>
-
 ## Overview
 
 Manage multiple installations of node.js on a Windows computer.
@@ -129,10 +77,10 @@ NVM for Windows is a command line tool. Simply type `nvm` in the console for hel
 - **`nvm use <version> [arch]`**: Switch to use the specified version. Optionally use `latest`, `lts`, or `newest`. `newest` is the latest _installed_ version. Optionally specify 32/64bit architecture. `nvm use <arch>` will continue using the selected version, but switch to 32/64 bit mode. For information about using `use` in a specific directory (or using `.nvmrc`), please refer to [issue #16](https://github.com/coreybutler/nvm-windows/issues/16).
 - **`nvm root <path>`**: Set the directory where nvm should store different versions of node.js. If `<path>` is not set, the current root will be displayed.
 - **`nvm version`**: Displays the current running version of NVM for Windows.
-- **`nvm node_mirror <node_mirror_url>`**: Set the node mirror.People in China can use *https://npmmirror.com/mirrors/node/*
-- **`nvm npm_mirror <npm_mirror_url>`**: Set the npm mirror.People in China can use *https://npmmirror.com/mirrors/npm/*
+- **`nvm node_mirror <node_mirror_url>`**: Set the node mirror.People in China can use _<https://npmmirror.com/mirrors/node/>_>_
+- **`nvm npm_mirror <npm_mirror_url>`**: Set the npm mirror.People in China can use _<https://npmmirror.com/mirrors/npm/>_>_
 
-### :warning: Gotcha!
+### :warning: Gotcha
 
 Please note that any global npm modules you may have installed are **not** shared between the various versions of node.js you have installed. Additionally, some npm modules may not be supported in the version of node you're using, so be aware of your environment as you work.
 
@@ -152,7 +100,7 @@ See the [wiki](https://github.com/coreybutler/nvm-windows/wiki/Common-Issues#how
 
 ### Build from source
 
-- Install go from http://golang.org
+- Install go from <http://golang.org>g>
 - Download source / Git Clone the repo
 - Change GOARCH to amd64 in build.bat if you feel like building a 64-bit executable
 - Fire up a Windows command prompt and change directory to project dir
