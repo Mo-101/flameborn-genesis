@@ -6,7 +6,7 @@ async function main() {
     console.log('Starting address verification...');
     
     // Get the address from command line or use the default one
-    const addressToVerify = process.argv[2] || '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4';
+    const addressToVerify = process.argv[2] || '0x5cEE0f7bBf2a443aC024e6a7f0F729d86B084479';
     console.log(`Using address: ${addressToVerify}`);
 
     // Determine which network to connect to (default to alfajores testnet if not specified)

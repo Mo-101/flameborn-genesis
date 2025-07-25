@@ -1,0 +1,21 @@
+{
+  "network": "alfajores",
+  "contractAddress": "0x5cEE0f7bBf2a443aC024e6a7f0F729d86B084479",
+  "contractName": "FlameBorn Token (FLB)",
+  "status": "VERIFIED",
+  "verificationDate": "2025-07-25T04:28:15.000Z",
+  "tokenDetails": {
+    "name": "FlameBorn Token",
+    "symbol": "FLB",
+    "decimals": 18,
+    "maxTotalSupply": "102800",
+    "standard": "ERC-20"
+  },
+  "currentMetrics": {
+    "holders": 8,
+    "totalTransfers": 32,
+    "marketPrice": "$0.00 @ 0.000000 CELO"
+  },
+  "celoscanUrl": "https://alfajores.celoscan.io/address/0x5cEE0f7bBf2a443aC024e6a7f0F729d86B084479",
+  "deploymentNotes": "Official FLB Token contract - VERIFIED on CeloScan. This is the canonical address for all future references."
+}

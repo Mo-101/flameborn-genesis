@@ -1,5 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
+require('@nomiclabs/hardhat-etherscan');
+require('@celo-tools/hardhat-celo');
 
 module.exports = {
   solidity: "0.8.24",

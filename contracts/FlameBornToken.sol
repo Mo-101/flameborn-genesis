@@ -1,4 +1,4 @@
-// contracts/SoulboundSaleTokenV3.sol
+// contracts/SoulboundSaleToken.sol
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.24;
@@ -11,11 +11,11 @@ import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
- * @title FlameBornTokenV3
+ * @title FlameBornToken
  * @notice Soulbound ERC20 token for identity-based, non-transferable incentives.
  * @dev Fully gas-optimized and protected with proper access control and validation.
  */
-contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
+contract FlameBornToken is ERC20, ERC20Burnable, AccessControl, EIP712 {
     // === Custom Errors ===
     error ZeroAddress();
     error AlreadyRegistered();
@@ -63,7 +63,7 @@ contract FlameBornTokenV3 is ERC20, ERC20Burnable, AccessControl, EIP712 {
     bool public initialMintComplete;
 
     /**
-     * @notice Deploys FlameBornTokenV3 and mints initial supply to deployer.
+     * @notice Deploys FlameBornToken and mints initial supply to deployer.
      * @param initialSupply Initial supply (without decimals).
      */
     constructor(uint256 initialSupply)

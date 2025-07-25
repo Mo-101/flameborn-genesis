@@ -2,15 +2,19 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 module.exports = {
-  solidity: "0.8.24",
+  solidity: {
+    version: "0.8.24",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
   networks: {
     alfajores: {
       url: process.env.CELO_ALFAJORES_RPC_URL || 'https://alfajores-forno.celo-testnet.org',
       chainId: 44787,
-      accounts: [process.env.PRIVATE_KEY]
-    },
-    mainnet: {
-      url: process.env.CELO_MAINNET_RPC_URL || 'https://forno.celo.org',
       accounts: [process.env.PRIVATE_KEY]
     }
   },
