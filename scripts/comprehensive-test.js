@@ -5,7 +5,7 @@ const fs = require("fs");
 // Main contract details
 const CONTRACT_ADDRESS = "0x93F4c3B97aa4706e0a84f7667eB7f356F138dC60";
 
-// FlameBornTokenV3 ABI (simplified to include the main functions we want to test)
+// FlameBornToken ABI (simplified to include the main functions we want to test)
 const abi = [
   // Basic ERC20 functions
   "function name() view returns (string)",

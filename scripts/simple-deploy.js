@@ -4,7 +4,7 @@ const { ethers } = require('ethers');
 const fs = require('fs');
 
 // Load contract ABI and bytecode
-const contractJson = require('../artifacts/contracts/FlameBornToken.sol/FlameBornTokenV3.json');
+const contractJson = require('../artifacts/contracts/FlameBornToken.sol/FlameBornToken.json');
 
 async function main() {
   console.log('=====================================');
@@ -40,7 +40,7 @@ async function main() {
     wallet
   );
   
-  console.log(`Deploying FlameBornTokenV3 with initial supply: ${initialSupply}...`);
+  console.log(`Deploying FlameBornToken with initial supply: ${initialSupply}...`);
   
   // Deploy contract
   try {

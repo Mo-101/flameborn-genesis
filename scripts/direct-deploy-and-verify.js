@@ -101,12 +101,12 @@ async function deploy(networkName) {
     
     // Get contract bytecode and ABI
     console.log('[3/5] Preparing contract for deployment...');
-    const contractArtifact = getContractArtifact('FlameBornTokenV3');
+    const contractArtifact = getContractArtifact('FlameBornToken');
     const abi = contractArtifact.abi;
     const bytecode = contractArtifact.bytecode;
     
     // Deploy contract
-    console.log('[4/5] Deploying FlameBornTokenV3...');
+    console.log('[4/5] Deploying FlameBornToken...');
     const contractFactory = new ethers.ContractFactory(abi, bytecode, wallet);
     
     const initialSupply = 1000000;

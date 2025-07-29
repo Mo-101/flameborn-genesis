@@ -9,7 +9,7 @@ async function main() {
   console.log(`Deploying contracts with the account: ${wallet.address}`);
 
   // 2. Load Contract Artifact
-  const artifactPath = 'contracts/artifacts/contracts/FlameBornToken.sol/FlameBornTokenV3.json';
+  const artifactPath = 'artifacts/contracts/FlameBornToken.sol/FlameBornToken.json';
   if (!fs.existsSync(artifactPath)) {
       console.error(`Artifact not found at path: ${artifactPath}`);
       console.error('Please compile your contracts first by running "npx hardhat compile"');
@@ -21,7 +21,7 @@ async function main() {
 
   // 3. Deploy Contract
   const ContractFactory = new ethers.ContractFactory(abi, bytecode, wallet);
-  console.log('Deploying FlameBornTokenV3...');
+  console.log('Deploying FlameBornToken...');
   
   // The initial supply for the constructor
   const initialSupply = ethers.parseUnits("1000000", 18); // Example: 1 million tokens
@@ -30,7 +30,7 @@ async function main() {
   await contract.waitForDeployment();
 
   const contractAddress = await contract.getAddress();
-  console.log(`FlameBornTokenV3 deployed to: ${contractAddress}`);
+  console.log(`FlameBornToken deployed to: ${contractAddress}`);
 
   // 4. Save deployment info
   const deploymentInfo = {

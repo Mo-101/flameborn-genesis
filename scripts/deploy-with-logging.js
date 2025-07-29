@@ -18,8 +18,8 @@ async function main() {
     console.log(`   > Deployer address: ${deployer.address}`);
     console.log(`   > Deployer balance: ${await deployer.provider.getBalance(deployer.address)}`);
 
-    console.log("[3/5] Getting contract factory for FlameBornTokenV3...");
-    const FlameBornToken = await hre.ethers.getContractFactory("FlameBornTokenV3");
+    console.log("[3/5] Getting contract factory for FlameBornToken...");
+    const FlameBornToken = await hre.ethers.getContractFactory("FlameBornToken");
 
     const initialSupply = 1000000;
     console.log(`[4/5] Deploying contract with initial supply of ${initialSupply} tokens...`);
