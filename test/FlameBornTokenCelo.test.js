@@ -6,11 +6,11 @@ describe("FlameBornToken", function () {
   let owner, validator, user1, user2, tribalCouncil, youthLeader;
   
   // Role hashes
-  const DAO_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("DAO_ROLE"));
-  const VALIDATOR_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("VALIDATOR_ROLE"));
-  const YOUTH_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("YOUTH_ROLE"));
-  const ELDER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ELDER_ROLE"));
-  const TRIBAL_COUNCIL_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("TRIBAL_COUNCIL_ROLE"));
+  const DAO_ROLE = ethers.keccak256(ethers.toUtf8Bytes("DAO_ROLE"));
+  const VALIDATOR_ROLE = ethers.keccak256(ethers.toUtf8Bytes("VALIDATOR_ROLE"));
+  const YOUTH_ROLE = ethers.keccak256(ethers.toUtf8Bytes("YOUTH_ROLE"));
+  const ELDER_ROLE = ethers.keccak256(ethers.toUtf8Bytes("ELDER_ROLE"));
+  const TRIBAL_COUNCIL_ROLE = ethers.keccak256(ethers.toUtf8Bytes("TRIBAL_COUNCIL_ROLE"));
   const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
   before(async function () {
