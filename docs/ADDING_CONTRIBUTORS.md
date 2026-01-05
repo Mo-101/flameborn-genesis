@@ -59,7 +59,7 @@ Common contribution types include:
 | Emoji | Type | Represents |
 |-------|------|------------|
 | 💻 | `code` | Code contributions |
-| 📖 | `doc` | Documentation |
+| 📖 | `docs` | Documentation |
 | 🎨 | `design` | Design contributions |
 | 🤔 | `ideas` | Ideas and planning |
 | 🐛 | `bug` | Bug reports |
