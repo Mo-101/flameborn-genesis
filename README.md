@@ -205,6 +205,53 @@ All in one atomic transaction.
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions from everyone! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) guide for detailed information on how to contribute to Flameborn Genesis.
+
+Whether you're a developer, designer, tester, or documentation writer, your contributions help save lives and support African sovereignty.
+
+---
+
+## ✨ Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mo-101"><img src="https://avatars.githubusercontent.com/u/42095935?v=4" width="100px;" alt="Akanimo Iniobong"/><br /><sub><b>Akanimo Iniobong</b></sub></a><br /><a href="https://github.com/Mo-101/flameborn-genesis/commits?author=Mo-101" title="Code">💻</a> <a href="https://github.com/Mo-101/flameborn-genesis/commits?author=Mo-101" title="Documentation">📖</a> <a href="#ideas-Mo-101" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-Mo-101" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+### How to Add Yourself as a Contributor
+
+If you've contributed to this project, you can add yourself to the contributors list by:
+
+1. **Using the all-contributors bot**: Comment on your PR or issue with:
+   ```
+   @all-contributors please add @your-username for code, docs, design
+   ```
+   
+2. **Manually**: Update the `.all-contributorsrc` file and run the all-contributors CLI tool
+
+3. **Ask a maintainer**: Request to be added in your PR or by reaching out to `support@flameborn.org`
+
+**Contribution types include**: code, documentation, design, testing, bug reports, security, translation, review, ideas, content, financial support, and more!
+
+---
+
 ## 📜 License
 
 This project is released under the [MIT License](LICENSE).
